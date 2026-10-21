@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Paleta do modo escuro: mesmos nomes de values/colors.xml, o Android escolhe a pasta conforme o tema do aparelho. -->
+<resources>
+    <color name="md_theme_primary">#B0C6EC</color>
+    <color name="md_theme_onPrimary">#1A2E4A</color>
+    <color name="md_theme_primaryContainer">#31476A</color>
+    <color name="md_theme_onPrimaryContainer">#D6E3FF</color>
+
+    <color name="md_theme_secondary">#BEC6DC</color>
+    <color name="md_theme_onSecondary">#283141</color>
+    <color name="md_theme_secondaryContainer">#3E4759</color>
+    <color name="md_theme_onSecondaryContainer">#DAE2F9</color>
+
+    <color name="md_theme_tertiary">#DDBCE0</color>
+    <color name="md_theme_onTertiary">#3F2844</color>
+    <color name="md_theme_tertiaryContainer">#573E5C</color>
+    <color name="md_theme_onTertiaryContainer">#FAD8FD</color>
+
+    <color name="md_theme_error">#FFB4AB</color>
+    <color name="md_theme_onError">#690005</color>
+    <color name="md_theme_errorContainer">#93000A</color>
+    <color name="md_theme_onErrorContainer">#FFDAD6</color>
+
+    <color name="md_theme_background">#111318</color>
+    <color name="md_theme_onBackground">#E2E2E9</color>
+    <color name="md_theme_surface">#111318</color>
+    <color name="md_theme_onSurface">#E2E2E9</color>
+    <color name="md_theme_surfaceVariant">#44474E</color>
+    <color name="md_theme_onSurfaceVariant">#C4C6D0</color>
+    <color name="md_theme_outline">#8E9099</color>
+    <color name="md_theme_outlineVariant">#44474E</color>
+
+    <color name="md_theme_inverseSurface">#E2E2E9</color>
+    <color name="md_theme_inverseOnSurface">#2E3036</color>
+    <color name="md_theme_inversePrimary">#23395B</color>
+
+    <color name="md_theme_surfaceDim">#111318</color>
+    <color name="md_theme_surfaceBright">#37393E</color>
+    <color name="md_theme_surfaceContainerLowest">#0C0E13</color>
+    <color name="md_theme_surfaceContainerLow">#1A1C20</color>
+    <color name="md_theme_surfaceContainer">#1E2025</color>
+    <color name="md_theme_surfaceContainerHigh">#282A2F</color>
+    <color name="md_theme_surfaceContainerHighest">#33353A</color>
+</resources>
