@@ -77,12 +77,14 @@ com.example.rekly
 
 | Entidade | Campos principais | Relação |
 | --- | --- | --- |
-| `Usuario` | id, nome, email (único), senhaHash, onboardingConcluido, criadoEm | — |
+| `Usuario` | id, nome, email (único), senhaHash, salt, onboardingConcluido, criadoEm | — |
 | `Categoria` | id, nome, isPadrao, usuarioId (nulo nas padrão) | N:1 Usuario |
 | `Assinatura` | id, usuarioId, categoriaId, nomeServico, valor, valorVariavel, periodo, dataInicio, diaCobranca, status, participantes | N:1 Usuario e Categoria |
 | `Pagamento` | id, assinaturaId, competencia (AAAA-MM), valor, dataPagamento, status (PAGO, PENDENTE) | N:1 Assinatura; único por assinatura + competência |
 
 Categorias padrão (Streaming, Música, Moradia, Telecom, Saúde e bem-estar, Seguros, Outros) entram pelo callback `onCreate` do banco.
+
+Mudanças nas tabelas usam **AutoMigrations** do Room para manter os dados de teste: a cada mudança, a `version` do banco sobe e entra uma `AutoMigration(from, to)`. O Room exporta a estrutura de cada versão para `app/schemas`, que vai no commit.
 
 ### Regras de negócio portadas da web
 
