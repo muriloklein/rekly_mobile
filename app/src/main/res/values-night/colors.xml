@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Paleta do modo escuro: mesmos nomes de values/colors.xml, o Android escolhe a pasta conforme o tema do aparelho. -->
 <resources>
     <color name="md_theme_primary">#B0C6EC</color>
     <color name="md_theme_onPrimary">#1A2E4A</color>

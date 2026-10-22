@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Tema único: as cores vêm de values/colors.xml (claro) ou values-night/colors.xml (escuro). -->
     <style name="Base.Theme.Rekly" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>

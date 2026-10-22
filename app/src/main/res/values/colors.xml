@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Paleta do modo claro, gerada a partir de #23395B. O modo escuro usa os mesmos nomes em values-night/colors.xml. -->
 <resources>
     <color name="md_theme_primary">#23395B</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
