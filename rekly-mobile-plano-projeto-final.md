@@ -57,9 +57,9 @@ com.example.rekly
 ├── data
 │   ├── local        → AppDatabase, DAOs, Converters
 │   ├── entity       → Usuario, Categoria, Assinatura, Pagamento
-│   └── repository   → UsuarioRepository, AssinaturaRepository, ...
+│   └── repository   → UsuarioRepository, CategoriaRepository, AssinaturaRepository, PagamentoRepository
 ├── domain
-│   ├── model        → enums Periodo, StatusAssinatura, StatusPagamento
+│   ├── model        → enums Periodo, StatusAssinatura, StatusPagamento; Resultado e ErroRegra
 │   ├── catalogo     → CatalogoServicos (lista fixa de serviços e contas)
 │   └── rules        → CalculoGastos, Validadores, GeradorPagamentos, SugestaoEconomia
 ├── ui
@@ -78,23 +78,32 @@ com.example.rekly
 | Entidade | Campos principais | Relação |
 | --- | --- | --- |
 | `Usuario` | id, nome, email (único), senhaHash, salt, onboardingConcluido, criadoEm | — |
-| `Categoria` | id, nome, isPadrao, usuarioId (nulo nas padrão) | N:1 Usuario |
-| `Assinatura` | id, usuarioId, categoriaId, nomeServico, valor, valorVariavel, periodo, dataInicio, diaCobranca, status, participantes | N:1 Usuario e Categoria |
-| `Pagamento` | id, assinaturaId, competencia (AAAA-MM), valor, dataPagamento, status (PAGO, PENDENTE) | N:1 Assinatura; único por assinatura + competência |
+| `Categoria` | id, nome (sem diferenciar maiúsculas), isPadrao, usuarioId (nulo nas padrão) | N:1 Usuario; único por usuário + nome |
+| `Assinatura` | id, usuarioId, categoriaId, nomeServico, valorCentavos, valorVariavel, periodo, dataInicio, diaCobranca, status, participantes, ativaDesde, criadoEm | N:1 Usuario e Categoria (categoria com RESTRICT) |
+| `Pagamento` | id, assinaturaId, competencia (AAAA-MM), valorCentavos, dataVencimento, dataPagamento, status (PAGO, PENDENTE) | N:1 Assinatura (RESTRICT); único por assinatura + competência |
 
-Categorias padrão (Streaming, Música, Moradia, Telecom, Saúde e bem-estar, Seguros, Outros) entram pelo callback `onCreate` do banco.
+Categorias padrão (Streaming, Música, Moradia, Telecom, Saúde e bem-estar, Seguros, Outros) têm ids fixos de 1 a 7 (`CategoriasPadrao`) e entram pelo callback `onOpen` do banco com `INSERT OR IGNORE`. O `onCreate` não serviria: ele não roda em bancos que chegam por AutoMigration, então quem já tinha o app instalado ficaria sem as categorias.
+
+**Valores em dinheiro** são guardados em centavos (`Long`), nunca em `Double`, para o rateio e a mensalidade não acumularem erro de arredondamento. A formatação em reais fica só na tela.
+
+**Assinaturas incompletas:** as criadas pelo onboarding não têm `valorCentavos`, `dataInicio` nem `diaCobranca` (campos nulos). `Assinatura.isCompleta()` indica se já dá para usá-las; incompletas ficam fora dos totais e da geração de pagamentos e mostram o selo "falta valor".
+
+**Erros de regra:** os repositórios devolvem `Resultado.Sucesso` ou `Resultado.Falha(ErroRegra)`, e a tela transforma o `ErroRegra` em mensagem do `strings.xml`. As chaves estrangeiras com `RESTRICT` reforçam no próprio banco os bloqueios de exclusão.
 
 Mudanças nas tabelas usam **AutoMigrations** do Room para manter os dados de teste: a cada mudança, a `version` do banco sobe e entra uma `AutoMigration(from, to)`. O Room exporta a estrutura de cada versão para `app/schemas`, que vai no commit.
 
 ### Regras de negócio portadas da web
 
-- **Mensalidade** = valor ÷ meses do período (1, 3, 6 ou 12).
+- **Mensalidade** = valor ÷ meses do período (1, 3, 6 ou 12), em centavos, arredondando meio centavo para cima.
 - **Custo real** = mensalidade ÷ participantes (mínimo 1).
-- **Próximo vencimento** = próxima data com o dia de cobrança; dia 31 em mês curto cai no último dia do mês.
-- **Pagamento presumido:** ao abrir o app, para cada assinatura ativa e cada competência cujo dia de cobrança já passou e ainda não tem pagamento, cria um. Valor fixo → `PAGO` com o valor da assinatura. Valor variável → `PENDENTE` com o último valor pago como estimativa. O índice único por assinatura + competência impede duplicar.
+- **Vencimentos** seguem o ciclo do período a partir do mês da data de início (anual vence uma vez por ano, trimestral a cada 3 meses); um vencimento anterior à data de início é ignorado. Dia 31 em mês curto cai no último dia do mês.
+- **Próximo vencimento** = primeiro vencimento do ciclo a partir de hoje, inclusive. Cancelada não tem próximo vencimento.
+- **Pagamento presumido:** ao abrir o app, para cada assinatura ativa e completa e cada competência do ciclo cujo vencimento já chegou (inclusive hoje) e ainda não tem pagamento, cria um. Valor fixo → `PAGO` com o valor da assinatura. Valor variável → `PENDENTE` com o último valor pago como estimativa (ou o valor da assinatura, se não houver histórico). O índice único por assinatura + competência impede duplicar.
+- **Sem pagamentos retroativos:** `ativaDesde` guarda quando a assinatura passou a ser ativa (ao criar, ao converter um teste ou ao reativar uma cancelada), e só são gerados pagamentos a partir desse mês. Cadastrar uma Netflix assinada em 2022 não cria dezenas de pagamentos.
+- **Assinatura em teste** não gera pagamento e não entra no total mensal; o resumo mostra as assinaturas em teste separadas.
 - **Confirmar pagamento:** um pendente vira pago com um toque, permitindo ajustar o valor.
 - **Exclusão bloqueada** se a assinatura tiver pagamentos; a alternativa é cancelar, que interrompe a geração de novos pagamentos.
-- **Categoria** não pode ser excluída se tiver assinaturas, nem repetir nome para o mesmo usuário. Categorias padrão não são editáveis.
+- **Categoria** não pode ser excluída se tiver assinaturas, nem repetir o nome de uma categoria padrão ou do próprio usuário (sem diferenciar maiúsculas). Categorias padrão não são editáveis nem excluíveis.
 - **Sugestões**, calculadas na hora: duas ou mais assinaturas ativas na mesma categoria (sobreposição); assinatura em teste há mais de 30 dias ("vai começar a cobrar?"); pagamento pendente há mais de 7 dias.
 - **Catálogo:** só preenche nome, categoria, período e se o valor é variável. Não traz preço, porque preços mudam e variam por plano.
 - **Senha** guardada como hash SHA-256 com salt, nunca em texto puro.
@@ -115,7 +124,7 @@ Com sessão ativa o app abre direto na MainActivity; o botão Sair, no Perfil, l
 | Cadastro | Activity | Nome, e-mail, senha, confirmar senha | Nome ≥ 3 letras; e-mail válido e não cadastrado; senha ≥ 6 caracteres; confirmação igual |
 | Onboarding | Activity | Chips do catálogo agrupados por categoria ("O que você paga todo mês?") e botão Concluir | Aparece só no primeiro acesso; cria as assinaturas marcadas sem valor, para completar depois; pode ser pulado |
 | Main | Activity + BottomNavigation | Hospeda os 3 Fragments e o botão + flutuante | Sem sessão, volta para o Login; ao abrir, roda a geração de pagamentos presumidos |
-| Resumo | Fragment | Total mensal, custo real, gasto por categoria, próximos 7 dias, pendentes a confirmar, sugestões | Considera só assinaturas ativas e em teste |
+| Resumo | Fragment | Total mensal, custo real, gasto por categoria, próximos 7 dias, pendentes a confirmar, sugestões | Totais consideram só assinaturas ativas e completas; as em teste aparecem separadas |
 | Assinaturas | Fragment | RecyclerView com busca por nome e filtro por status; selo "falta valor" nas criadas pelo onboarding | Toque abre o detalhe |
 | Perfil | Fragment | Nome e e-mail, Categorias, Sair | Sair limpa a sessão e fecha a pilha |
 | Form de assinatura | Activity + BottomSheet do catálogo | Ao criar, abre primeiro o catálogo (ou "Outro"); depois nome, categoria, valor, valor variável, período, data de início, dia de cobrança, status, participantes | Campos obrigatórios; valor > 0; dia entre 1 e 31; participantes ≥ 1; data não futura |
