@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_resumo"
+        android:icon="@drawable/ic_resumo"
+        android:title="@string/aba_resumo" />
+    <item
+        android:id="@+id/nav_assinaturas"
+        android:icon="@drawable/ic_assinaturas"
+        android:title="@string/aba_assinaturas" />
+    <item
+        android:id="@+id/nav_perfil"
+        android:icon="@drawable/ic_perfil"
+        android:title="@string/aba_perfil" />
+</menu>

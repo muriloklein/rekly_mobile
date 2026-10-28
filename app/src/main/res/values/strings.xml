@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Rekly</string>
+
+    <!-- Navegação principal -->
+    <string name="aba_resumo">Resumo</string>
+    <string name="aba_assinaturas">Assinaturas</string>
+    <string name="aba_perfil">Perfil</string>
+    <string name="acao_nova_assinatura">Nova assinatura</string>
+    <string name="aviso_em_breve">Disponível em breve</string>
+
+    <!-- Fragments (conteúdo provisório até as próximas tarefas) -->
+    <string name="resumo_vazio">O resumo do mês vai aparecer aqui</string>
+    <string name="assinaturas_vazio">Nenhuma assinatura cadastrada ainda</string>
+    <string name="perfil_vazio">Seus dados e as categorias vão aparecer aqui</string>
 </resources>
