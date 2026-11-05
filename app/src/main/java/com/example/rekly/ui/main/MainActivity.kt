@@ -1,5 +1,7 @@
 package com.example.rekly.ui.main
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.IdRes
@@ -12,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.example.rekly.R
 import com.example.rekly.databinding.ActivityMainBinding
+import com.example.rekly.ui.auth.LoginActivity
+import com.example.rekly.util.SessionManager
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -31,6 +35,14 @@ class MainActivity : AppCompatActivity() {
         applySystemBarInsets()
         setUpNavigation(savedInstanceState)
         binding.fabNewSubscription.setOnClickListener { openNewSubscription() }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (SessionManager(this).loggedUserId() == null) {
+            startActivity(LoginActivity.newTask(this))
+            finish()
+        }
     }
 
     /**
@@ -114,5 +126,11 @@ class MainActivity : AppCompatActivity() {
             view.updatePadding(top = insets.getInsets(type).top)
             insets
         }
+    }
+
+    companion object {
+        fun newTask(context: Context): Intent =
+            Intent(context, MainActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
     }
 }

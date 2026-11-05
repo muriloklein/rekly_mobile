@@ -1,6 +1,5 @@
 package com.example.rekly.ui.auth
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -62,9 +61,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun openMain() {
-        val intent = Intent(this, MainActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        startActivity(intent)
+        startActivity(MainActivity.newTask(this))
         finish()
     }
 }

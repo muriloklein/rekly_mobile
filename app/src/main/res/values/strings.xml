@@ -12,6 +12,7 @@
     <string name="action_login">Entrar</string>
     <string name="action_go_to_sign_up">Não tem conta? Cadastre-se</string>
     <string name="action_sign_up">Criar conta</string>
+    <string name="action_logout">Sair</string>
 
     <!-- Rule errors -->
     <string name="error_name_required">Informe o nome</string>

@@ -1,5 +1,6 @@
 package com.example.rekly.ui.auth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -63,9 +64,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun openMain() {
-        val intent = Intent(this, MainActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        startActivity(intent)
+        startActivity(MainActivity.newTask(this))
         finish()
+    }
+
+    companion object {
+        fun newTask(context: Context): Intent =
+            Intent(context, LoginActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
     }
 }
