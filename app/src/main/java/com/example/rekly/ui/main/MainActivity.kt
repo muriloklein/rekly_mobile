@@ -15,8 +15,8 @@ import com.example.rekly.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
 /**
- * Tela central do app: hospeda as abas Resumo, Assinaturas e Perfil, trocadas
- * pela navegação inferior, e o botão + para cadastrar assinatura.
+ * Central screen of the app: hosts the Summary, Subscriptions and Profile tabs, switched
+ * by the bottom navigation, and the + button to add a subscription.
  */
 class MainActivity : AppCompatActivity() {
 
@@ -28,90 +28,90 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar.root)
-        aplicarEspacamentoDasBarrasDoSistema()
-        configurarNavegacao(savedInstanceState)
-        binding.fabNovaAssinatura.setOnClickListener { abrirNovaAssinatura() }
+        applySystemBarInsets()
+        setUpNavigation(savedInstanceState)
+        binding.fabNewSubscription.setOnClickListener { openNewSubscription() }
     }
 
     /**
-     * Depois de uma rotação, o fragment da aba é recriado pelo FragmentManager e a
-     * navegação inferior restaura o item selecionado aqui, depois do onCreate.
-     * Só falta acertar o título e o botão + para a aba restaurada.
+     * After a rotation, the tab's fragment is recreated by the FragmentManager and the
+     * bottom navigation restores the selected item here, after onCreate.
+     * All that is left is to fix the title and the + button for the restored tab.
      */
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        atualizarCabecalho(binding.navegacaoInferior.selectedItemId)
+        updateHeader(binding.bottomNavigation.selectedItemId)
     }
 
-    private fun configurarNavegacao(savedInstanceState: Bundle?) {
-        binding.navegacaoInferior.setOnItemSelectedListener { item ->
-            mostrarAba(item.itemId)
+    private fun setUpNavigation(savedInstanceState: Bundle?) {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            showTab(item.itemId)
             true
         }
-        // Tocar na aba que já está aberta não recria o fragment
-        binding.navegacaoInferior.setOnItemReselectedListener { }
+        // Tapping the tab that is already open does not recreate the fragment
+        binding.bottomNavigation.setOnItemReselectedListener { }
 
-        // Na primeira abertura mostra o Resumo; após rotação o fragment já foi restaurado
+        // On first launch shows the Summary; after rotation the fragment was already restored
         if (savedInstanceState == null) {
-            mostrarAba(R.id.nav_resumo)
+            showTab(R.id.nav_summary)
         }
     }
 
-    private fun mostrarAba(@IdRes itemId: Int) {
+    private fun showTab(@IdRes itemId: Int) {
         val fragment: Fragment = when (itemId) {
-            R.id.nav_assinaturas -> AssinaturasFragment()
-            R.id.nav_perfil -> PerfilFragment()
-            else -> ResumoFragment()
+            R.id.nav_subscriptions -> SubscriptionsFragment()
+            R.id.nav_profile -> ProfileFragment()
+            else -> SummaryFragment()
         }
         supportFragmentManager.commit {
             setReorderingAllowed(true)
-            replace(R.id.containerFragments, fragment)
+            replace(R.id.fragmentContainer, fragment)
         }
-        atualizarCabecalho(itemId)
+        updateHeader(itemId)
     }
 
-    /** Título da toolbar conforme a aba; o botão + não aparece no Perfil. */
-    private fun atualizarCabecalho(@IdRes itemId: Int) {
-        val titulo = when (itemId) {
-            R.id.nav_assinaturas -> R.string.aba_assinaturas
-            R.id.nav_perfil -> R.string.aba_perfil
-            else -> R.string.aba_resumo
+    /** Toolbar title according to the tab; the + button does not show on the Profile. */
+    private fun updateHeader(@IdRes itemId: Int) {
+        val title = when (itemId) {
+            R.id.nav_subscriptions -> R.string.tab_subscriptions
+            R.id.nav_profile -> R.string.tab_profile
+            else -> R.string.tab_summary
         }
-        supportActionBar?.setTitle(titulo)
-        if (itemId == R.id.nav_perfil) {
-            binding.fabNovaAssinatura.hide()
+        supportActionBar?.setTitle(title)
+        if (itemId == R.id.nav_profile) {
+            binding.fabNewSubscription.hide()
         } else {
-            binding.fabNovaAssinatura.show()
+            binding.fabNewSubscription.show()
         }
     }
 
-    // Substituído pela abertura do formulário de assinatura na tarefa 6
-    private fun abrirNovaAssinatura() {
-        Snackbar.make(binding.root, R.string.aviso_em_breve, Snackbar.LENGTH_SHORT)
-            .setAnchorView(binding.fabNovaAssinatura)
+    // Replaced by opening the subscription form in task 6
+    private fun openNewSubscription() {
+        Snackbar.make(binding.root, R.string.notice_coming_soon, Snackbar.LENGTH_SHORT)
+            .setAnchorView(binding.fabNewSubscription)
             .show()
     }
 
     /**
-     * Com o app desenhando atrás das barras do sistema (edge-to-edge), cada parte
-     * cuida do seu espaçamento: a toolbar estende a cor até a barra de status, a
-     * navegação inferior se afasta da barra de navegação sozinha e as laterais
-     * (celular deitado) ficam com a tela inteira.
+     * With the app drawing behind the system bars (edge-to-edge), each part handles
+     * its own spacing: the toolbar extends its color up to the status bar, the bottom
+     * navigation moves away from the navigation bar by itself and the sides
+     * (phone in landscape) keep the full screen.
      */
-    private fun aplicarEspacamentoDasBarrasDoSistema() {
-        val tipo = WindowInsetsCompat.Type.systemBars()
+    private fun applySystemBarInsets() {
+        val type = WindowInsetsCompat.Type.systemBars()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val barras = insets.getInsets(tipo)
-            view.updatePadding(left = barras.left, right = barras.right)
-            // Repassa aos filhos só o topo e a base, que já foram tratados nas laterais
+            val bars = insets.getInsets(type)
+            view.updatePadding(left = bars.left, right = bars.right)
+            // Passes only the top and bottom to the children, since the sides were already handled
             WindowInsetsCompat.Builder(insets)
-                .setInsets(tipo, Insets.of(0, barras.top, 0, barras.bottom))
+                .setInsets(type, Insets.of(0, bars.top, 0, bars.bottom))
                 .build()
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.toolbar.root) { view, insets ->
-            view.updatePadding(top = insets.getInsets(tipo).top)
+            view.updatePadding(top = insets.getInsets(type).top)
             insets
         }
     }

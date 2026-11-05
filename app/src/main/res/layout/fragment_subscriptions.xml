@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.PerfilFragment">
+    tools:context=".ui.main.SubscriptionsFragment">
 
     <TextView
-        android:id="@+id/textoVazio"
+        android:id="@+id/emptyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="@dimen/spacing_large"
-        android:text="@string/perfil_vazio"
+        android:text="@string/subscriptions_empty"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurfaceVariant" />
 
