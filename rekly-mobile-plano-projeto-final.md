@@ -33,15 +33,15 @@ Cada requisito do enunciado tem um lugar definido no app; a coluna da direita é
 | --- | --- | --- |
 | Kotlin + Android Studio | Projeto inteiro | Estrutura de pacotes |
 | Estrutura de projeto Android | Pacotes `data`, `domain`, `ui`, `util`; Manifest; Gradle com version catalog | Árvore do projeto |
-| Activities (mín. 4) | 7 Activities: Login, Cadastro, Onboarding, Main, AssinaturaForm, AssinaturaDetalhe, Categorias | Manifest |
-| Fragments | 3 Fragments na `MainActivity`: Resumo, Assinaturas, Perfil | Troca pela barra inferior |
-| Layouts XML | Um layout por tela, `item_assinatura.xml` para lista, tema Material 3 | Layouts no editor |
+| Activities (mín. 4) | 7 Activities: Login, SignUp, Onboarding, Main, SubscriptionForm, SubscriptionDetails, Categories | Manifest |
+| Fragments | 3 Fragments na `MainActivity`: Summary, Subscriptions, Profile | Troca pela barra inferior |
+| Layouts XML | Um layout por tela, `item_subscription.xml` para lista, tema Material 3 | Layouts no editor |
 | Ciclo de vida | ViewModel sobrevive à rotação; listas observam LiveData do Room e se atualizam sozinhas; sessão checada em `onStart` | Girar a tela sem perder o formulário |
 | Login funcional | `LoginActivity` valida contra o Room, sessão em SharedPreferences | Login errado e certo |
 | Navegação e layout consistentes | Mesmo tema, mesma toolbar, mesmas cores da web | Percorrer o app |
 | Formulários e validações | Cadastro, login, assinatura, categoria | Erros nos campos |
 | Regras de negócio | Mensalidade, custo real, bloqueio de exclusão, sugestões | Dashboard e detalhe |
-| Objetos de domínio | `data class` para entidades + enums `Periodo` e `Status` | Código |
+| Objetos de domínio | `data class` para entidades + enums `BillingPeriod`, `SubscriptionStatus` e `PaymentStatus` | Código |
 | Persistência | Room com 4 tabelas e relacionamentos | App Inspection > Database Inspector |
 | CRUD | Assinaturas (completo) e Categorias (completo) | Criar, listar, editar, excluir |
 | GitHub + branches | Branches `main` e `develop`; commits diários dos dois na `develop`; merge na `main` só de versões estáveis | Gráfico de branches e autores dos commits |
@@ -52,45 +52,49 @@ Cada requisito do enunciado tem um lugar definido no app; a coluna da direita é
 
 O app segue MVVM em três camadas: a tela (Activity/Fragment) observa um ViewModel, que chama um Repository, que fala com os DAOs do Room. Nenhuma tela acessa o banco direto.
 
+**Idioma:** o código fica em inglês (classes, funções, tabelas, ids, testes e comentários); os textos da interface ficam em português no `strings.xml`; as mensagens de commit ficam em português.
+
 ```
 com.example.rekly
 ├── data
-│   ├── local        → AppDatabase, DAOs, Converters
-│   ├── entity       → Usuario, Categoria, Assinatura, Pagamento
-│   └── repository   → UsuarioRepository, CategoriaRepository, AssinaturaRepository, PagamentoRepository
+│   ├── local        → AppDatabase, DAOs, Converters, DefaultCategories
+│   ├── entity       → User, Category, Subscription, Payment
+│   └── repository   → UserRepository, CategoryRepository, SubscriptionRepository, PaymentRepository
 ├── domain
-│   ├── model        → enums Periodo, StatusAssinatura, StatusPagamento; Resultado e ErroRegra
-│   ├── catalogo     → CatalogoServicos (lista fixa de serviços e contas)
-│   └── rules        → CalculoGastos, Validadores, GeradorPagamentos, SugestaoEconomia
+│   ├── model        → enums BillingPeriod, SubscriptionStatus, PaymentStatus; OperationResult e RuleError
+│   ├── catalog      → ServiceCatalog (lista fixa de serviços e contas)
+│   └── rules        → ExpenseCalculator, Validators, PaymentGenerator, PasswordHasher, SavingsSuggestions
 ├── ui
-│   ├── auth         → LoginActivity, CadastroActivity
+│   ├── auth         → LoginActivity, SignUpActivity
 │   ├── onboarding   → OnboardingActivity
-│   ├── main         → MainActivity + fragments resumo, assinaturas, perfil
-│   ├── assinatura   → AssinaturaFormActivity, AssinaturaDetalheActivity, CatalogoBottomSheet
-│   └── categoria    → CategoriasActivity
+│   ├── main         → MainActivity + SummaryFragment, SubscriptionsFragment, ProfileFragment
+│   ├── subscription → SubscriptionFormActivity, SubscriptionDetailsActivity, CatalogBottomSheet
+│   └── category     → CategoriesActivity
 └── util             → SessionManager, formatação de moeda e data
 ```
 
-**Dependências a adicionar:** Room (runtime, ktx, compiler via KSP), Lifecycle (viewmodel-ktx, livedata-ktx), Coroutines e RecyclerView. Atenção: o projeto usa AGP 9 com Kotlin embutido, então a versão do plugin KSP precisa ser compatível com ele. Vale testar isso no primeiro dia.
+**Dependências:** Room 2.8 (runtime, ktx, compiler via KSP), Lifecycle (viewmodel-ktx, livedata-ktx), fragment-ktx, RecyclerView e desugaring do `java.time` para o minSdk 24. As Coroutines vêm junto com o Room e o Lifecycle.
 
 ### Tabelas do Room
 
 | Entidade | Campos principais | Relação |
 | --- | --- | --- |
-| `Usuario` | id, nome, email (único), senhaHash, salt, onboardingConcluido, criadoEm | — |
-| `Categoria` | id, nome (sem diferenciar maiúsculas), isPadrao, usuarioId (nulo nas padrão) | N:1 Usuario; único por usuário + nome |
-| `Assinatura` | id, usuarioId, categoriaId, nomeServico, valorCentavos, valorVariavel, periodo, dataInicio, diaCobranca, status, participantes, ativaDesde, criadoEm | N:1 Usuario e Categoria (categoria com RESTRICT) |
-| `Pagamento` | id, assinaturaId, competencia (AAAA-MM), valorCentavos, dataVencimento, dataPagamento, status (PAGO, PENDENTE) | N:1 Assinatura (RESTRICT); único por assinatura + competência |
+| `User` (`users`) | id, name, email (único), passwordHash, salt, onboardingCompleted, createdAt | — |
+| `Category` (`categories`) | id, name (sem diferenciar maiúsculas), isDefault, userId (nulo nas padrão) | N:1 User; único por usuário + nome |
+| `Subscription` (`subscriptions`) | id, userId, categoryId, serviceName, amountCents, variableAmount, period, startDate, billingDay, status, participants, activeSince, createdAt | N:1 User e Category (categoria com RESTRICT) |
+| `Payment` (`payments`) | id, subscriptionId, referenceMonth (AAAA-MM), amountCents, dueDate, paidDate, status (PAID, PENDING) | N:1 Subscription (RESTRICT); único por assinatura + competência |
 
-Categorias padrão (Streaming, Música, Moradia, Telecom, Saúde e bem-estar, Seguros, Outros) têm ids fixos de 1 a 7 (`CategoriasPadrao`) e entram pelo callback `onOpen` do banco com `INSERT OR IGNORE`. O `onCreate` não serviria: ele não roda em bancos que chegam por AutoMigration, então quem já tinha o app instalado ficaria sem as categorias.
+Categorias padrão (Streaming, Música, Moradia, Telecom, Saúde e bem-estar, Seguros, Outros) têm ids fixos de 1 a 7 (`DefaultCategories`) e entram pelo callback `onOpen` do banco com `INSERT OR IGNORE`. O `onCreate` não serviria: ele não roda em bancos que chegam por AutoMigration, então quem já tinha o app instalado ficaria sem as categorias.
 
 **Valores em dinheiro** são guardados em centavos (`Long`), nunca em `Double`, para o rateio e a mensalidade não acumularem erro de arredondamento. A formatação em reais fica só na tela.
 
-**Assinaturas incompletas:** as criadas pelo onboarding não têm `valorCentavos`, `dataInicio` nem `diaCobranca` (campos nulos). `Assinatura.isCompleta()` indica se já dá para usá-las; incompletas ficam fora dos totais e da geração de pagamentos e mostram o selo "falta valor".
+**Assinaturas incompletas:** as criadas pelo onboarding não têm `amountCents`, `startDate` nem `billingDay` (campos nulos). `Subscription.isComplete()` indica se já dá para usá-las; incompletas ficam fora dos totais e da geração de pagamentos e mostram o selo "falta valor".
 
-**Erros de regra:** os repositórios devolvem `Resultado.Sucesso` ou `Resultado.Falha(ErroRegra)`, e a tela transforma o `ErroRegra` em mensagem do `strings.xml`. As chaves estrangeiras com `RESTRICT` reforçam no próprio banco os bloqueios de exclusão.
+**Erros de regra:** os repositórios devolvem `OperationResult.Success` ou `OperationResult.Failure(RuleError)`, e a tela transforma o `RuleError` em mensagem do `strings.xml`. As chaves estrangeiras com `RESTRICT` reforçam no próprio banco os bloqueios de exclusão.
 
 Mudanças nas tabelas usam **AutoMigrations** do Room para manter os dados de teste: a cada mudança, a `version` do banco sobe e entra uma `AutoMigration(from, to)`. O Room exporta a estrutura de cada versão para `app/schemas`, que vai no commit.
+
+Exceção única: na tradução do código para inglês, quando só havia dados de teste, o banco foi recriado do zero na versão 1, com tabelas e colunas em inglês (foi preciso desinstalar o app do emulador uma vez). Daqui em diante vale a regra das AutoMigrations.
 
 ### Regras de negócio portadas da web
 
@@ -98,8 +102,8 @@ Mudanças nas tabelas usam **AutoMigrations** do Room para manter os dados de te
 - **Custo real** = mensalidade ÷ participantes (mínimo 1).
 - **Vencimentos** seguem o ciclo do período a partir do mês da data de início (anual vence uma vez por ano, trimestral a cada 3 meses); um vencimento anterior à data de início é ignorado. Dia 31 em mês curto cai no último dia do mês.
 - **Próximo vencimento** = primeiro vencimento do ciclo a partir de hoje, inclusive. Cancelada não tem próximo vencimento.
-- **Pagamento presumido:** ao abrir o app, para cada assinatura ativa e completa e cada competência do ciclo cujo vencimento já chegou (inclusive hoje) e ainda não tem pagamento, cria um. Valor fixo → `PAGO` com o valor da assinatura. Valor variável → `PENDENTE` com o último valor pago como estimativa (ou o valor da assinatura, se não houver histórico). O índice único por assinatura + competência impede duplicar.
-- **Sem pagamentos retroativos:** `ativaDesde` guarda quando a assinatura passou a ser ativa (ao criar, ao converter um teste ou ao reativar uma cancelada), e só são gerados pagamentos a partir desse mês. Cadastrar uma Netflix assinada em 2022 não cria dezenas de pagamentos.
+- **Pagamento presumido:** ao abrir o app, para cada assinatura ativa e completa e cada competência do ciclo cujo vencimento já chegou (inclusive hoje) e ainda não tem pagamento, cria um. Valor fixo → `PAID` com o valor da assinatura. Valor variável → `PENDING` com o último valor pago como estimativa (ou o valor da assinatura, se não houver histórico). O índice único por assinatura + competência impede duplicar.
+- **Sem pagamentos retroativos:** `activeSince` guarda quando a assinatura passou a ser ativa (ao criar, ao converter um teste ou ao reativar uma cancelada), e só são gerados pagamentos a partir desse mês. Cadastrar uma Netflix assinada em 2022 não cria dezenas de pagamentos.
 - **Assinatura em teste** não gera pagamento e não entra no total mensal; o resumo mostra as assinaturas em teste separadas.
 - **Confirmar pagamento:** um pendente vira pago com um toque, permitindo ajustar o valor.
 - **Exclusão bloqueada** se a assinatura tiver pagamentos; a alternativa é cancelar, que interrompe a geração de novos pagamentos.
@@ -120,16 +124,16 @@ Com sessão ativa o app abre direto na MainActivity; o botão Sair, no Perfil, l
 
 | Tela | Tipo | Conteúdo | Validações e regras |
 | --- | --- | --- | --- |
-| Login | Activity (launcher) | E-mail, senha, botão Entrar, link para cadastro | E-mail em formato válido; senha não vazia; credenciais conferidas no Room; se já há sessão, pula direto para a Main |
-| Cadastro | Activity | Nome, e-mail, senha, confirmar senha | Nome ≥ 3 letras; e-mail válido e não cadastrado; senha ≥ 6 caracteres; confirmação igual |
-| Onboarding | Activity | Chips do catálogo agrupados por categoria ("O que você paga todo mês?") e botão Concluir | Aparece só no primeiro acesso; cria as assinaturas marcadas sem valor, para completar depois; pode ser pulado |
-| Main | Activity + BottomNavigation | Hospeda os 3 Fragments e o botão + flutuante | Sem sessão, volta para o Login; ao abrir, roda a geração de pagamentos presumidos |
-| Resumo | Fragment | Total mensal, custo real, gasto por categoria, próximos 7 dias, pendentes a confirmar, sugestões | Totais consideram só assinaturas ativas e completas; as em teste aparecem separadas |
-| Assinaturas | Fragment | RecyclerView com busca por nome e filtro por status; selo "falta valor" nas criadas pelo onboarding | Toque abre o detalhe |
-| Perfil | Fragment | Nome e e-mail, Categorias, Sair | Sair limpa a sessão e fecha a pilha |
-| Form de assinatura | Activity + BottomSheet do catálogo | Ao criar, abre primeiro o catálogo (ou "Outro"); depois nome, categoria, valor, valor variável, período, data de início, dia de cobrança, status, participantes | Campos obrigatórios; valor > 0; dia entre 1 e 31; participantes ≥ 1; data não futura |
-| Detalhe da assinatura | Activity | Dados, mensalidade, custo real, próximo vencimento, histórico de pagamentos | Confirmar pendente ajustando valor; editar; cancelar; excluir com diálogo de confirmação e bloqueio se houver pagamentos |
-| Categorias | Activity | Lista com padrão e pessoais, diálogo para criar ou renomear | Nome obrigatório e único; padrão não editável; exclusão bloqueada se houver assinaturas |
+| Login (`LoginActivity`) | Activity (launcher) | E-mail, senha, botão Entrar, link para cadastro | E-mail em formato válido; senha não vazia; credenciais conferidas no Room; se já há sessão, pula direto para a Main |
+| Cadastro (`SignUpActivity`) | Activity | Nome, e-mail, senha, confirmar senha | Nome ≥ 3 letras; e-mail válido e não cadastrado; senha ≥ 6 caracteres; confirmação igual |
+| Onboarding (`OnboardingActivity`) | Activity | Chips do catálogo agrupados por categoria ("O que você paga todo mês?") e botão Concluir | Aparece só no primeiro acesso; cria as assinaturas marcadas sem valor, para completar depois; pode ser pulado |
+| Main (`MainActivity`) | Activity + BottomNavigation | Hospeda os 3 Fragments e o botão + flutuante | Sem sessão, volta para o Login; ao abrir, roda a geração de pagamentos presumidos |
+| Resumo (`SummaryFragment`) | Fragment | Total mensal, custo real, gasto por categoria, próximos 7 dias, pendentes a confirmar, sugestões | Totais consideram só assinaturas ativas e completas; as em teste aparecem separadas |
+| Assinaturas (`SubscriptionsFragment`) | Fragment | RecyclerView com busca por nome e filtro por status; selo "falta valor" nas criadas pelo onboarding | Toque abre o detalhe |
+| Perfil (`ProfileFragment`) | Fragment | Nome e e-mail, Categorias, Sair | Sair limpa a sessão e fecha a pilha |
+| Form de assinatura (`SubscriptionFormActivity`) | Activity + BottomSheet do catálogo (`CatalogBottomSheet`) | Ao criar, abre primeiro o catálogo (ou "Outro"); depois nome, categoria, valor, valor variável, período, data de início, dia de cobrança, status, participantes | Campos obrigatórios; valor > 0; dia entre 1 e 31; participantes ≥ 1; data não futura |
+| Detalhe da assinatura (`SubscriptionDetailsActivity`) | Activity | Dados, mensalidade, custo real, próximo vencimento, histórico de pagamentos | Confirmar pendente ajustando valor; editar; cancelar; excluir com diálogo de confirmação e bloqueio se houver pagamentos |
+| Categorias (`CategoriesActivity`) | Activity | Lista com padrão e pessoais, diálogo para criar ou renomear | Nome obrigatório e único; padrão não editável; exclusão bloqueada se houver assinaturas |
 
 O estado do formulário fica no ViewModel, então girar a tela não apaga o que foi digitado. Esse é o exemplo de ciclo de vida para a apresentação.
 
@@ -142,22 +146,22 @@ O repositório usa só duas branches:
 
 Antes de começar o dia, cada um faz `git pull` na `develop` para pegar o que o outro enviou, evitando conflitos. Cada um commita da própria conta do GitHub, para o histórico mostrar os dois autores.
 
-| # | Tarefa | Responsável | Depende de | Entrega |
-| --- | --- | --- | --- | --- |
-| 1 | Setup do projeto | Guilherme | — | Dependências, KSP, pacotes, tema e cores, `CLAUDE.md`, branch `develop`, `AppDatabase` com a entidade `Usuario` |
-| 2 | Banco de dados (Room) | Murilo | 1 | Entidades `Categoria`, `Assinatura` e `Pagamento` com DAOs, repositórios, regras de cálculo e testes |
-| 3 | Autenticação | Guilherme | 1 | Login, Cadastro, SessionManager |
-| 4 | Navegação principal | Murilo | 1 | MainActivity, BottomNavigation, 3 Fragments vazios |
-| 5 | Catálogo de serviços | Murilo | 2 | Lista de serviços e contas + BottomSheet de escolha |
-| 6 | CRUD de assinaturas | Guilherme | 4, 5 | Lista, formulário com catálogo, detalhe, editar, cancelar, excluir |
-| 7 | CRUD de categorias | Murilo | 2 | Tela de categorias com CRUD completo |
-| 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote |
-| 9 | Pagamentos | Guilherme | 6 | Geração presumida, confirmação de pendentes, histórico no detalhe |
-| 10 | Dashboard | Murilo | 9 | Fragment Resumo com totais, vencimentos, pendentes e sugestões |
-| 11 | Notificações | Murilo | 9 | Lembrete diário com WorkManager (extra) |
-| 12 | README e prints | Os dois | todas | README completo e pasta `prints/` |
+| # | Tarefa | Responsável | Depende de | Entrega | Situação |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Setup do projeto | Guilherme | — | Dependências, KSP, pacotes, tema e cores, `CLAUDE.md`, branch `develop`, `AppDatabase` com a entidade `User` | ✅ Concluída |
+| 2 | Banco de dados (Room) | Murilo | 1 | Entidades `Category`, `Subscription` e `Payment` com DAOs, repositórios, regras de cálculo e testes | ✅ Concluída |
+| 3 | Autenticação | Guilherme | 1 | `Validators`, `PasswordHasher`, `UserRepository`, `SessionManager`, Login e Cadastro | 🟡 Regras e repositório prontos; faltam as telas |
+| 4 | Navegação principal | Murilo | 1 | MainActivity, BottomNavigation, 3 Fragments vazios | ✅ Concluída |
+| 5 | Catálogo de serviços | Murilo | 2 | Lista de serviços e contas + BottomSheet de escolha | ⬜ |
+| 6 | CRUD de assinaturas | Guilherme | 4, 5 | Lista, formulário com catálogo, detalhe, editar, cancelar, excluir (o `SubscriptionRepository` já existe) | ⬜ |
+| 7 | CRUD de categorias | Murilo | 2 | Tela de categorias com CRUD completo (o `CategoryRepository` já existe) | ⬜ |
+| 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote | ⬜ |
+| 9 | Pagamentos | Guilherme | 6 | Chamar a geração presumida ao abrir a Main, confirmar pendentes e mostrar o histórico no detalhe | 🟡 A lógica (`PaymentGenerator`, `PaymentRepository`) foi adiantada pelo Murilo na tarefa 2; falta a parte de tela |
+| 10 | Dashboard | Murilo | 9 | Fragment Resumo com totais, vencimentos, pendentes e sugestões (os cálculos já estão no `ExpenseCalculator`) | ⬜ |
+| 11 | Notificações | Murilo | 9 | Lembrete diário com WorkManager (extra) | ⬜ |
+| 12 | README e prints | Os dois | todas | README completo e pasta `prints/` | ⬜ |
 
-Depois do setup, as tarefas 2, 3 e 4 andam em paralelo; depois 5 e 7; depois 6 e 8. O `Usuario` fica no setup para a autenticação não esperar pelo banco das outras entidades; cada nova entidade só é acrescentada na lista do `AppDatabase`.
+Depois do setup, as tarefas 2, 3 e 4 andam em paralelo; depois 5 e 7; depois 6 e 8. O `User` fica no setup para a autenticação não esperar pelo banco das outras entidades; cada nova entidade só é acrescentada na lista do `AppDatabase`.
 
 ### Conventional Commits
 
@@ -165,7 +169,7 @@ Formato: `tipo(escopo): descrição no imperativo`, em português e minúsculas.
 
 ```
 chore(gradle): adiciona dependências do room e lifecycle
-feat(db): cria entidades usuario, categoria e assinatura
+feat(db): cria entidades user, category e subscription
 feat(db): adiciona dao de assinaturas com consultas por usuário
 test(rules): cobre cálculo de mensalidade e custo real
 feat(auth): implementa tela de login com validação de campos
@@ -182,7 +186,7 @@ Tipos usados: `feat`, `fix`, `refactor`, `style`, `test`, `docs`, `chore`.
 
 O trabalho cabe em 4 etapas; o app precisa estar completo no fim da etapa 3, deixando a 4 só para polimento e apresentação. Falta definir a data de entrega para transformar etapas em semanas.
 
-1. **Base** — tarefas 1, 2 e 4. Ao fim: app abre, banco criado, navegação vazia funcionando.
+1. **Base** — tarefas 1, 2 e 4. Ao fim: app abre, banco criado, navegação vazia funcionando. ✅ Concluída e mesclada na `main`.
 2. **Núcleo** — tarefas 3, 5, 6 e 7. Ao fim: login real, catálogo e os dois CRUDs completos.
 3. **Menos trabalho manual** — tarefas 8, 9 e 10. Ao fim: onboarding, pagamentos automáticos e dashboard.
 4. **Entrega** — tarefas 11 (se der tempo) e 12, testes no aparelho, ensaio da apresentação.
@@ -192,7 +196,7 @@ O fim de cada etapa é um bom momento para fazer o merge da `develop` na `main`.
 ### Checklist
 
 - [ ] Professor adicionado como colaborador do repositório
-- [ ] Branch `develop` criada; `main` recebe só merges da `develop`
+- [x] Branch `develop` criada; `main` recebe só merges da `develop`
 - [ ] Mínimo de 4 Activities declaradas no Manifest (plano tem 7)
 - [ ] CRUD de assinaturas funcionando de ponta a ponta
 - [ ] Criar assinatura pelo catálogo em menos de 30 segundos
