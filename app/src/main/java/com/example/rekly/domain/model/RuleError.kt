@@ -29,6 +29,11 @@ enum class RuleError {
     PASSWORD_REQUIRED,
     PASSWORD_TOO_SHORT,
     PASSWORDS_DO_NOT_MATCH,
+    CATEGORY_REQUIRED,
+    INVALID_BILLING_DAY,
+    INVALID_PARTICIPANTS,
+    START_DATE_REQUIRED,
+    START_DATE_IN_FUTURE,
 
     /** Same error for unknown e-mail and wrong password, so it does not reveal which e-mails exist. */
     INVALID_CREDENTIALS

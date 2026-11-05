@@ -4,8 +4,11 @@ import com.example.rekly.domain.model.RuleError
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
+import java.time.LocalDate
 
 class ValidatorsTest {
+
+    private val today = LocalDate.of(2026, 11, 4)
 
     @Test
     fun blank_name_is_required() {
@@ -80,5 +83,79 @@ class ValidatorsTest {
     @Test
     fun confirmation_equal_to_password_passes() {
         assertNull(Validators.validateConfirmation("123456", "123456"))
+    }
+
+    // Subscription form
+
+    @Test
+    fun blank_service_name_is_required() {
+        assertEquals(RuleError.NAME_REQUIRED, Validators.validateServiceName("  "))
+    }
+
+    @Test
+    fun service_name_with_one_letter_is_valid() {
+        assertNull(Validators.validateServiceName("X"))
+    }
+
+    @Test
+    fun missing_category_is_required() {
+        assertEquals(RuleError.CATEGORY_REQUIRED, Validators.validateCategory(null))
+    }
+
+    @Test
+    fun chosen_category_passes() {
+        assertNull(Validators.validateCategory(1))
+    }
+
+    @Test
+    fun missing_or_non_positive_amount_is_invalid() {
+        assertEquals(RuleError.INVALID_AMOUNT, Validators.validateAmount(null))
+        assertEquals(RuleError.INVALID_AMOUNT, Validators.validateAmount(0))
+        assertEquals(RuleError.INVALID_AMOUNT, Validators.validateAmount(-100))
+    }
+
+    @Test
+    fun amount_of_one_cent_is_valid() {
+        assertNull(Validators.validateAmount(1))
+    }
+
+    @Test
+    fun billing_day_outside_1_to_31_is_invalid() {
+        assertEquals(RuleError.INVALID_BILLING_DAY, Validators.validateBillingDay(null))
+        assertEquals(RuleError.INVALID_BILLING_DAY, Validators.validateBillingDay(0))
+        assertEquals(RuleError.INVALID_BILLING_DAY, Validators.validateBillingDay(32))
+    }
+
+    @Test
+    fun billing_days_1_and_31_are_valid() {
+        assertNull(Validators.validateBillingDay(1))
+        assertNull(Validators.validateBillingDay(31))
+    }
+
+    @Test
+    fun zero_or_missing_participants_are_invalid() {
+        assertEquals(RuleError.INVALID_PARTICIPANTS, Validators.validateParticipants(null))
+        assertEquals(RuleError.INVALID_PARTICIPANTS, Validators.validateParticipants(0))
+    }
+
+    @Test
+    fun one_participant_is_valid() {
+        assertNull(Validators.validateParticipants(1))
+    }
+
+    @Test
+    fun missing_start_date_is_required() {
+        assertEquals(RuleError.START_DATE_REQUIRED, Validators.validateStartDate(null, today))
+    }
+
+    @Test
+    fun future_start_date_is_invalid() {
+        assertEquals(RuleError.START_DATE_IN_FUTURE, Validators.validateStartDate(today.plusDays(1), today))
+    }
+
+    @Test
+    fun start_date_today_or_in_the_past_is_valid() {
+        assertNull(Validators.validateStartDate(today, today))
+        assertNull(Validators.validateStartDate(LocalDate.of(2022, 5, 10), today))
     }
 }

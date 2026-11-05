@@ -19,5 +19,10 @@ fun RuleError.messageRes(): Int = when (this) {
     RuleError.PASSWORD_REQUIRED -> R.string.error_password_required
     RuleError.PASSWORD_TOO_SHORT -> R.string.error_password_too_short
     RuleError.PASSWORDS_DO_NOT_MATCH -> R.string.error_passwords_do_not_match
+    RuleError.CATEGORY_REQUIRED -> R.string.error_category_required
+    RuleError.INVALID_BILLING_DAY -> R.string.error_invalid_billing_day
+    RuleError.INVALID_PARTICIPANTS -> R.string.error_invalid_participants
+    RuleError.START_DATE_REQUIRED -> R.string.error_start_date_required
+    RuleError.START_DATE_IN_FUTURE -> R.string.error_start_date_in_future
     RuleError.INVALID_CREDENTIALS -> R.string.error_invalid_credentials
 }

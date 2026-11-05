@@ -1,11 +1,13 @@
 package com.example.rekly.domain.rules
 
 import com.example.rekly.domain.model.RuleError
+import java.time.LocalDate
 
 object Validators {
 
     private const val MIN_NAME_LENGTH = 3
     private const val MIN_PASSWORD_LENGTH = 6
+    private val billingDays = 1..31
     private val emailFormat = Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
 
     fun validateName(name: String): RuleError? = when {
@@ -25,4 +27,25 @@ object Validators {
 
     fun validateConfirmation(password: String, confirmation: String): RuleError? =
         if (password == confirmation) null else RuleError.PASSWORDS_DO_NOT_MATCH
+
+    fun validateServiceName(name: String): RuleError? =
+        if (name.isBlank()) RuleError.NAME_REQUIRED else null
+
+    fun validateCategory(categoryId: Long?): RuleError? =
+        if (categoryId == null) RuleError.CATEGORY_REQUIRED else null
+
+    fun validateAmount(amountCents: Long?): RuleError? =
+        if (amountCents == null || amountCents <= 0) RuleError.INVALID_AMOUNT else null
+
+    fun validateBillingDay(billingDay: Int?): RuleError? =
+        if (billingDay == null || billingDay !in billingDays) RuleError.INVALID_BILLING_DAY else null
+
+    fun validateParticipants(participants: Int?): RuleError? =
+        if (participants == null || participants < 1) RuleError.INVALID_PARTICIPANTS else null
+
+    fun validateStartDate(startDate: LocalDate?, today: LocalDate): RuleError? = when {
+        startDate == null -> RuleError.START_DATE_REQUIRED
+        startDate.isAfter(today) -> RuleError.START_DATE_IN_FUTURE
+        else -> null
+    }
 }
