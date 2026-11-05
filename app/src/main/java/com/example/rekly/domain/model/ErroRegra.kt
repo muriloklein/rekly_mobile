@@ -21,5 +21,15 @@ enum class ErroRegra {
     VALOR_INVALIDO,
 
     /** Registro não existe mais no banco. */
-    NAO_ENCONTRADO
+    NAO_ENCONTRADO,
+
+    NOME_CURTO,
+    EMAIL_INVALIDO,
+    EMAIL_JA_CADASTRADO,
+    SENHA_OBRIGATORIA,
+    SENHA_CURTA,
+    SENHAS_DIFERENTES,
+
+    /** Mesmo erro para e-mail inexistente e senha errada, para não revelar quais e-mails existem. */
+    CREDENCIAIS_INVALIDAS
 }
