@@ -1,6 +1,34 @@
 <resources>
     <string name="app_name">Rekly</string>
 
+    <!-- Authentication -->
+    <string name="login_heading">Entre na sua conta</string>
+    <string name="title_sign_up">Criar conta</string>
+    <string name="label_name">Nome</string>
+    <string name="label_email">E-mail</string>
+    <string name="label_password">Senha</string>
+    <string name="label_password_confirmation">Confirmar senha</string>
+    <string name="helper_password">Pelo menos 6 caracteres</string>
+    <string name="action_login">Entrar</string>
+    <string name="action_go_to_sign_up">Não tem conta? Cadastre-se</string>
+    <string name="action_sign_up">Criar conta</string>
+
+    <!-- Rule errors -->
+    <string name="error_name_required">Informe o nome</string>
+    <string name="error_duplicate_name">Já existe uma categoria com esse nome</string>
+    <string name="error_default_category">Categorias padrão não podem ser alteradas nem excluídas</string>
+    <string name="error_category_in_use">Esta categoria tem assinaturas e não pode ser excluída</string>
+    <string name="error_subscription_has_payments">Esta assinatura tem pagamentos; cancele em vez de excluir</string>
+    <string name="error_invalid_amount">Informe um valor maior que zero</string>
+    <string name="error_not_found">Registro não encontrado</string>
+    <string name="error_name_too_short">O nome precisa ter pelo menos 3 letras</string>
+    <string name="error_invalid_email">Informe um e-mail válido</string>
+    <string name="error_email_already_registered">Este e-mail já está cadastrado</string>
+    <string name="error_password_required">Informe a senha</string>
+    <string name="error_password_too_short">A senha precisa ter pelo menos 6 caracteres</string>
+    <string name="error_passwords_do_not_match">As senhas não conferem</string>
+    <string name="error_invalid_credentials">E-mail ou senha incorretos</string>
+
     <!-- Main navigation -->
     <string name="tab_summary">Resumo</string>
     <string name="tab_subscriptions">Assinaturas</string>
