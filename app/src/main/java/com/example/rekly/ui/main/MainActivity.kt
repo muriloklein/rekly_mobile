@@ -15,8 +15,8 @@ import androidx.fragment.app.commit
 import com.example.rekly.R
 import com.example.rekly.databinding.ActivityMainBinding
 import com.example.rekly.ui.auth.LoginActivity
+import com.example.rekly.ui.subscription.SubscriptionFormActivity
 import com.example.rekly.util.SessionManager
-import com.google.android.material.snackbar.Snackbar
 
 /**
  * Central screen of the app: hosts the Summary, Subscriptions and Profile tabs, switched
@@ -97,11 +97,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Replaced by opening the subscription form in task 6
     private fun openNewSubscription() {
-        Snackbar.make(binding.root, R.string.notice_coming_soon, Snackbar.LENGTH_SHORT)
-            .setAnchorView(binding.fabNewSubscription)
-            .show()
+        startActivity(SubscriptionFormActivity.newIntent(this))
     }
 
     /**

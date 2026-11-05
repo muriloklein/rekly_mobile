@@ -30,6 +30,10 @@
             android:name=".ui.main.MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.subscription.SubscriptionFormActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

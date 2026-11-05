@@ -29,13 +29,44 @@
     <string name="error_password_too_short">A senha precisa ter pelo menos 6 caracteres</string>
     <string name="error_passwords_do_not_match">As senhas não conferem</string>
     <string name="error_invalid_credentials">E-mail ou senha incorretos</string>
+    <string name="error_category_required">Escolha uma categoria</string>
+    <string name="error_invalid_billing_day">Informe um dia entre 1 e 31</string>
+    <string name="error_invalid_participants">Informe pelo menos 1 participante</string>
+    <string name="error_start_date_required">Informe a data de início</string>
+    <string name="error_start_date_in_future">A data de início não pode ser no futuro</string>
+
+    <!-- Subscription form -->
+    <string name="title_new_subscription">Nova assinatura</string>
+    <string name="title_edit_subscription">Editar assinatura</string>
+    <string name="label_service_name">Nome do serviço ou conta</string>
+    <string name="label_category">Categoria</string>
+    <string name="label_amount">Valor cobrado</string>
+    <string name="helper_amount">Valor de cada cobrança (ex.: o valor anual, se for anual)</string>
+    <string name="currency_prefix">R$</string>
+    <string name="label_variable_amount">O valor muda a cada cobrança (água, luz…)</string>
+    <string name="label_period">Período</string>
+    <string name="label_start_date">Data de início</string>
+    <string name="label_billing_day">Dia de cobrança</string>
+    <string name="helper_billing_day">Em meses mais curtos, cai no último dia</string>
+    <string name="label_status">Status</string>
+    <string name="label_participants">Participantes</string>
+    <string name="helper_participants">Pessoas que dividem o gasto</string>
+    <string name="action_save">Salvar</string>
+
+    <!-- Enum labels -->
+    <string name="period_monthly">Mensal</string>
+    <string name="period_quarterly">Trimestral</string>
+    <string name="period_semiannual">Semestral</string>
+    <string name="period_annual">Anual</string>
+    <string name="status_active">Ativa</string>
+    <string name="status_trial">Em teste</string>
+    <string name="status_canceled">Cancelada</string>
 
     <!-- Main navigation -->
     <string name="tab_summary">Resumo</string>
     <string name="tab_subscriptions">Assinaturas</string>
     <string name="tab_profile">Perfil</string>
     <string name="action_new_subscription">Nova assinatura</string>
-    <string name="notice_coming_soon">Disponível em breve</string>
 
     <!-- Fragments (placeholder content until the next tasks) -->
     <string name="summary_empty">O resumo do mês vai aparecer aqui</string>
