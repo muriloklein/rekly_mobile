@@ -5,13 +5,13 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.LocalDate
 
-@Entity(tableName = "usuarios", indices = [Index(value = ["email"], unique = true)])
-data class Usuario(
+@Entity(tableName = "users", indices = [Index(value = ["email"], unique = true)])
+data class User(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val nome: String,
+    val name: String,
     val email: String,
-    val senhaHash: String,
+    val passwordHash: String,
     val salt: String,
-    val onboardingConcluido: Boolean = false,
-    val criadoEm: LocalDate
+    val onboardingCompleted: Boolean = false,
+    val createdAt: LocalDate
 )

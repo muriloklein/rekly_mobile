@@ -1,51 +1,49 @@
 package com.example.rekly.data.local
 
 import android.content.Context
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.rekly.data.entity.Assinatura
-import com.example.rekly.data.entity.Categoria
-import com.example.rekly.data.entity.Pagamento
-import com.example.rekly.data.entity.Usuario
+import com.example.rekly.data.entity.Category
+import com.example.rekly.data.entity.Payment
+import com.example.rekly.data.entity.Subscription
+import com.example.rekly.data.entity.User
 
 @Database(
-    entities = [Usuario::class, Categoria::class, Assinatura::class, Pagamento::class],
-    version = 2,
-    exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2)]
+    entities = [User::class, Category::class, Subscription::class, Payment::class],
+    version = 1,
+    exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun usuarioDao(): UsuarioDao
-    abstract fun categoriaDao(): CategoriaDao
-    abstract fun assinaturaDao(): AssinaturaDao
-    abstract fun pagamentoDao(): PagamentoDao
+    abstract fun userDao(): UserDao
+    abstract fun categoryDao(): CategoryDao
+    abstract fun subscriptionDao(): SubscriptionDao
+    abstract fun paymentDao(): PaymentDao
 
     companion object {
         @Volatile
-        private var instancia: AppDatabase? = null
+        private var instance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase =
-            instancia ?: synchronized(this) {
-                instancia ?: Room.databaseBuilder(
+            instance ?: synchronized(this) {
+                instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "rekly.db"
                 )
                     .addCallback(object : RoomDatabase.Callback() {
-                        // onOpen (e não onCreate) para cobrir também bancos migrados
+                        // onOpen (not onCreate) so databases that arrived through migration are covered too
                         override fun onOpen(db: SupportSQLiteDatabase) {
                             super.onOpen(db)
-                            CategoriasPadrao.inserirSeFaltar(db)
+                            DefaultCategories.insertMissing(db)
                         }
                     })
                     .build()
-                    .also { instancia = it }
+                    .also { instance = it }
             }
     }
 }

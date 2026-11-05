@@ -7,15 +7,15 @@ import java.time.YearMonth
 class Converters {
 
     @TypeConverter
-    fun deLocalDate(data: LocalDate?): Long? = data?.toEpochDay()
+    fun fromLocalDate(date: LocalDate?): Long? = date?.toEpochDay()
 
     @TypeConverter
-    fun paraLocalDate(epochDay: Long?): LocalDate? = epochDay?.let { LocalDate.ofEpochDay(it) }
+    fun toLocalDate(epochDay: Long?): LocalDate? = epochDay?.let { LocalDate.ofEpochDay(it) }
 
-    /** Competência guardada como texto "AAAA-MM", legível no Database Inspector e ordenável. */
+    /** Reference month stored as "YYYY-MM" text, readable in the Database Inspector and sortable. */
     @TypeConverter
-    fun deYearMonth(competencia: YearMonth?): String? = competencia?.toString()
+    fun fromYearMonth(referenceMonth: YearMonth?): String? = referenceMonth?.toString()
 
     @TypeConverter
-    fun paraYearMonth(texto: String?): YearMonth? = texto?.let { YearMonth.parse(it) }
+    fun toYearMonth(text: String?): YearMonth? = text?.let { YearMonth.parse(it) }
 }
