@@ -74,7 +74,7 @@ Arquivo novo vai para o pacote da sua camada. Se não couber em nenhum, pergunte
 
 - Valores monetários: `Long` em **centavos** no banco; formatação em BRL só na UI (`util`).
 - Datas: `LocalDate` com `TypeConverter` (epochDay). Use `java.time` (core library desugaring se necessário para minSdk 24).
-- Enums persistidos pelo `name`, via `TypeConverter`.
+- Enums persistidos pelo `name`, pelo conversor embutido do Room (não precisa de `TypeConverter` próprio).
 - Mudou uma entidade? Suba a `version` do `AppDatabase` e acrescente uma `AutoMigration(from, to)`. Renomear ou apagar coluna/tabela exige uma `AutoMigrationSpec`. Nunca usar `fallbackToDestructiveMigration`: os dados de teste devem ser preservados.
 - Commite a pasta `app/schemas`: é dela que o Room gera as migrations.
 
@@ -82,13 +82,14 @@ Arquivo novo vai para o pacote da sua camada. Se não couber em nenhum, pergunte
 
 - **Mensalidade** = valor ÷ meses do período (mensal 1, trimestral 3, semestral 6, anual 12).
 - **Custo real** = mensalidade ÷ participantes (mínimo 1).
-- **Próximo vencimento**: próxima data com o dia de cobrança; dia maior que o último do mês cai no último dia.
-- **Pagamento presumido**: ao abrir a `MainActivity`, para cada assinatura ativa e cada competência cujo dia de cobrança já passou sem pagamento, gera um. Valor fixo → `PAID`; valor variável → `PENDING` com o último valor pago como estimativa. Deve ser **idempotente** (abrir o app duas vezes não duplica).
+- **Vencimentos** seguem o ciclo do período a partir do mês da data de início (anual vence uma vez por ano); vencimento anterior à data de início é ignorado; dia maior que o último do mês cai no último dia.
+- **Próximo vencimento**: primeiro vencimento do ciclo a partir de hoje, inclusive. Cancelada não tem.
+- **Pagamento presumido**: ao abrir a `MainActivity`, para cada assinatura ativa e completa (`isComplete()`) e cada competência do ciclo cujo vencimento já chegou (inclusive hoje) sem pagamento, gera um. Só a partir do mês de `activeSince`, sem retroativos; em teste não gera. Valor fixo → `PAID`; valor variável → `PENDING` com o último valor pago como estimativa. Deve ser **idempotente** (abrir o app duas vezes não duplica).
 - Pendente vira pago com confirmação do usuário, podendo ajustar o valor.
 - **Exclusão** de assinatura bloqueada se houver pagamentos; a alternativa é cancelar. Cancelada não gera novos pagamentos.
 - **Categoria**: nome único por usuário; padrão não editável nem excluível; exclusão bloqueada se tiver assinaturas.
 - **Sugestões** (calculadas na hora, sem tabela): 2+ ativas na mesma categoria; em teste há mais de 30 dias; pagamento pendente há mais de 7 dias.
-- **Catálogo**: preenche nome, categoria, período e `variableAmount`. Nunca preço (muda com o tempo).
+- **Catálogo** (`domain/catalog/ServiceCatalog`): preenche nome, categoria, período e `variableAmount`. Nunca preço (muda com o tempo). Telas trocam só o id do serviço.
 - **Senha**: hash SHA-256 com salt aleatório por usuário. Nunca salvar ou logar senha em texto puro.
 - Todo dado é filtrado pelo usuário logado (`userId` da sessão).
 
