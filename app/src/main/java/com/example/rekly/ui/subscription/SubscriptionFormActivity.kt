@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.example.rekly.R
 import com.example.rekly.data.entity.Category
 import com.example.rekly.data.local.AppDatabase
@@ -65,6 +66,7 @@ class SubscriptionFormActivity : AppCompatActivity() {
         applyFormScreenInsets(binding.root, binding.toolbar.root)
 
         setUpChoiceFields()
+        setUpCatalog(savedInstanceState)
         binding.saveButton.setOnClickListener { save() }
 
         viewModel.categories.observe(this) { list ->
@@ -142,11 +144,34 @@ class SubscriptionFormActivity : AppCompatActivity() {
     }
 
     private fun applyPrefill(prefill: SubscriptionPrefill) {
-        binding.serviceNameInput.setText(prefill.serviceName)
-        binding.amountInput.setText(prefill.amountText)
-        binding.variableAmountSwitch.isChecked = prefill.variableAmount
-        binding.billingDayInput.setText(prefill.billingDayText)
-        binding.participantsInput.setText(prefill.participantsText)
+        prefill.serviceName?.let { binding.serviceNameInput.setText(it) }
+        prefill.amountText?.let { binding.amountInput.setText(it) }
+        prefill.variableAmount?.let { binding.variableAmountSwitch.isChecked = it }
+        prefill.billingDayText?.let { binding.billingDayInput.setText(it) }
+        prefill.participantsText?.let { binding.participantsInput.setText(it) }
+    }
+
+    /**
+     * The catalog is only offered when creating. It opens by itself on the first launch
+     * (not after a rotation, when the FragmentManager already restored it if it was open)
+     * and can be reopened by the button. The listener is registered on every onCreate, so
+     * a choice made right after a rotation is still received.
+     */
+    private fun setUpCatalog(savedInstanceState: Bundle?) {
+        val creating = subscriptionId == null
+        binding.catalogButton.isVisible = creating
+        if (!creating) return
+
+        supportFragmentManager.setFragmentResultListener(CatalogBottomSheet.REQUEST_KEY, this) { _, result ->
+            CatalogBottomSheet.chosenServiceId(result)?.let(viewModel::applyCatalogService)
+        }
+        binding.catalogButton.setOnClickListener { openCatalog() }
+        if (savedInstanceState == null) openCatalog()
+    }
+
+    private fun openCatalog() {
+        if (supportFragmentManager.findFragmentByTag(CatalogBottomSheet.TAG) != null) return
+        CatalogBottomSheet().show(supportFragmentManager, CatalogBottomSheet.TAG)
     }
 
     private fun openDatePicker() {

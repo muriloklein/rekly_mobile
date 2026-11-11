@@ -23,6 +23,15 @@
             android:orientation="vertical"
             android:padding="@dimen/spacing_large">
 
+            <!-- Only shown when creating; the catalog also opens by itself at the start -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/catalogButton"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="@string/action_choose_from_catalog" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/serviceNameLayout"
                 android:layout_width="match_parent"

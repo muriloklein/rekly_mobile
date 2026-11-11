@@ -10,6 +10,7 @@ import com.example.rekly.data.entity.Category
 import com.example.rekly.data.entity.Subscription
 import com.example.rekly.data.repository.CategoryRepository
 import com.example.rekly.data.repository.SubscriptionRepository
+import com.example.rekly.domain.catalog.ServiceCatalog
 import com.example.rekly.domain.model.BillingPeriod
 import com.example.rekly.domain.model.RuleError
 import com.example.rekly.domain.model.SubscriptionStatus
@@ -40,12 +41,13 @@ data class SubscriptionFormState(
     val finished: Boolean = false
 )
 
+/** Values to write into the text fields once; a null field keeps what is on screen. */
 data class SubscriptionPrefill(
-    val serviceName: String = "",
-    val amountText: String = "",
-    val variableAmount: Boolean = false,
-    val billingDayText: String = "",
-    val participantsText: String = ""
+    val serviceName: String? = null,
+    val amountText: String? = null,
+    val variableAmount: Boolean? = null,
+    val billingDayText: String? = null,
+    val participantsText: String? = null
 )
 
 class SubscriptionFormViewModel(
@@ -76,6 +78,22 @@ class SubscriptionFormViewModel(
 
     fun onPrefillApplied() {
         _prefill.value = null
+    }
+
+    /**
+     * Fills what the catalog knows (name, category, period, variable amount) and keeps
+     * what the user already typed in the other fields (amount, billing day, participants).
+     */
+    fun applyCatalogService(serviceId: String) {
+        val service = ServiceCatalog.findById(serviceId) ?: return
+        update {
+            it.copy(
+                categoryId = service.categoryId,
+                period = service.period,
+                errors = it.errors.copy(serviceName = null, category = null)
+            )
+        }
+        _prefill.value = SubscriptionPrefill(serviceName = service.name, variableAmount = service.variableAmount)
     }
 
     fun selectCategory(categoryId: Long) = update { it.copy(categoryId = categoryId) }
