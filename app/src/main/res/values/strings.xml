@@ -52,6 +52,12 @@
     <string name="label_participants">Participantes</string>
     <string name="helper_participants">Pessoas que dividem o gasto</string>
     <string name="action_save">Salvar</string>
+    <string name="action_choose_from_catalog">Escolher do catálogo</string>
+
+    <!-- Service catalog -->
+    <string name="catalog_title">O que você quer cadastrar?</string>
+    <string name="catalog_other">Outro (preencher à mão)</string>
+    <string name="catalog_detail_variable">%1$s · valor variável</string>
 
     <!-- Enum labels -->
     <string name="period_monthly">Mensal</string>
