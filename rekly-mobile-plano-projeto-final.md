@@ -62,7 +62,7 @@ com.example.rekly
 │   └── repository   → UserRepository, CategoryRepository, SubscriptionRepository, PaymentRepository
 ├── domain
 │   ├── model        → enums BillingPeriod, SubscriptionStatus, PaymentStatus; OperationResult e RuleError
-│   ├── catalog      → ServiceCatalog (lista fixa de serviços e contas)
+│   ├── catalog      → ServiceCatalog e CatalogService (lista fixa de serviços e contas)
 │   └── rules        → ExpenseCalculator, Validators, PaymentGenerator, PasswordHasher, SavingsSuggestions
 ├── ui
 │   ├── auth         → LoginActivity, SignUpActivity
@@ -150,10 +150,10 @@ Antes de começar o dia, cada um faz `git pull` na `develop` para pegar o que o 
 | --- | --- | --- | --- | --- | --- |
 | 1 | Setup do projeto | Guilherme | — | Dependências, KSP, pacotes, tema e cores, `CLAUDE.md`, branch `develop`, `AppDatabase` com a entidade `User` | ✅ Concluída |
 | 2 | Banco de dados (Room) | Murilo | 1 | Entidades `Category`, `Subscription` e `Payment` com DAOs, repositórios, regras de cálculo e testes | ✅ Concluída |
-| 3 | Autenticação | Guilherme | 1 | `Validators`, `PasswordHasher`, `UserRepository`, `SessionManager`, Login e Cadastro | 🟡 Regras e repositório prontos; faltam as telas |
+| 3 | Autenticação | Guilherme | 1 | `Validators`, `PasswordHasher`, `UserRepository`, `SessionManager`, Login e Cadastro | ✅ Concluída |
 | 4 | Navegação principal | Murilo | 1 | MainActivity, BottomNavigation, 3 Fragments vazios | ✅ Concluída |
-| 5 | Catálogo de serviços | Murilo | 2 | Lista de serviços e contas + BottomSheet de escolha | ⬜ |
-| 6 | CRUD de assinaturas | Guilherme | 4, 5 | Lista, formulário com catálogo, detalhe, editar, cancelar, excluir (o `SubscriptionRepository` já existe) | ⬜ |
+| 5 | Catálogo de serviços | Murilo | 2 | Lista de serviços e contas + BottomSheet de escolha | ✅ Concluída (já ligado ao formulário de assinatura) |
+| 6 | CRUD de assinaturas | Guilherme | 4, 5 | Lista, formulário com catálogo, detalhe, editar, cancelar, excluir (o `SubscriptionRepository` já existe) | 🟡 Formulário pronto e abrindo o catálogo; faltam lista, detalhe, cancelar e excluir |
 | 7 | CRUD de categorias | Murilo | 2 | Tela de categorias com CRUD completo (o `CategoryRepository` já existe) | ⬜ |
 | 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote | ⬜ |
 | 9 | Pagamentos | Guilherme | 6 | Chamar a geração presumida ao abrir a Main, confirmar pendentes e mostrar o histórico no detalhe | 🟡 A lógica (`PaymentGenerator`, `PaymentRepository`) foi adiantada pelo Murilo na tarefa 2; falta a parte de tela |
