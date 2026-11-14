@@ -153,7 +153,7 @@ Antes de começar o dia, cada um faz `git pull` na `develop` para pegar o que o 
 | 3 | Autenticação | Guilherme | 1 | `Validators`, `PasswordHasher`, `UserRepository`, `SessionManager`, Login e Cadastro | ✅ Concluída |
 | 4 | Navegação principal | Murilo | 1 | MainActivity, BottomNavigation, 3 Fragments vazios | ✅ Concluída |
 | 5 | Catálogo de serviços | Murilo | 2 | Lista de serviços e contas + BottomSheet de escolha | ✅ Concluída (já ligado ao formulário de assinatura) |
-| 6 | CRUD de assinaturas | Guilherme | 4, 5 | Lista, formulário com catálogo, detalhe, editar, cancelar, excluir (o `SubscriptionRepository` já existe) | 🟡 Formulário pronto e abrindo o catálogo; faltam lista, detalhe, cancelar e excluir |
+| 6 | CRUD de assinaturas | Guilherme | 4, 5 | Lista, formulário com catálogo, detalhe, editar, cancelar, excluir (o `SubscriptionRepository` já existe) | ✅ Concluída |
 | 7 | CRUD de categorias | Murilo | 2 | Tela de categorias com CRUD completo (o `CategoryRepository` já existe) | ⬜ |
 | 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote | ⬜ |
 | 9 | Pagamentos | Guilherme | 6 | Chamar a geração presumida ao abrir a Main, confirmar pendentes e mostrar o histórico no detalhe | 🟡 A lógica (`PaymentGenerator`, `PaymentRepository`) foi adiantada pelo Murilo na tarefa 2; falta a parte de tela |
@@ -197,8 +197,8 @@ O fim de cada etapa é um bom momento para fazer o merge da `develop` na `main`.
 
 - [ ] Professor adicionado como colaborador do repositório
 - [x] Branch `develop` criada; `main` recebe só merges da `develop`
-- [ ] Mínimo de 4 Activities declaradas no Manifest (plano tem 7)
-- [ ] CRUD de assinaturas funcionando de ponta a ponta
+- [x] Mínimo de 4 Activities declaradas no Manifest (plano tem 7)
+- [x] CRUD de assinaturas funcionando de ponta a ponta
 - [ ] Criar assinatura pelo catálogo em menos de 30 segundos
 - [ ] Pagamentos gerados ao abrir o app, sem duplicar ao abrir de novo
 - [ ] Validações mostrando erro no próprio campo (`TextInputLayout.error`)
