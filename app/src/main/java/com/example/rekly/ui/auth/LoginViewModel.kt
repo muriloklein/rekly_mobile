@@ -17,7 +17,8 @@ data class LoginState(
     val passwordError: RuleError? = null,
     val credentialsError: RuleError? = null,
     val loading: Boolean = false,
-    val loggedInUserId: Long? = null
+    val loggedInUserId: Long? = null,
+    val needsOnboarding: Boolean = false
 )
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
@@ -36,7 +37,10 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
         _state.value = LoginState(loading = true)
         viewModelScope.launch {
             _state.value = when (val result = userRepository.authenticate(email, password)) {
-                is OperationResult.Success -> LoginState(loggedInUserId = result.value.id)
+                is OperationResult.Success -> LoginState(
+                    loggedInUserId = result.value.id,
+                    needsOnboarding = !result.value.onboardingCompleted
+                )
                 is OperationResult.Failure -> LoginState(credentialsError = result.error)
             }
         }

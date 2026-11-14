@@ -13,6 +13,12 @@
     <string name="action_go_to_sign_up">Não tem conta? Cadastre-se</string>
     <string name="action_sign_up">Criar conta</string>
     <string name="action_logout">Sair</string>
+    <string name="title_onboarding">Bem-vindo ao Rekly</string>
+    <string name="onboarding_heading">O que você paga todo mês?</string>
+    <string name="onboarding_subtitle">Marque o que você já assina. Depois é só informar o valor e o dia de cada um.</string>
+    <string name="action_skip">Pular</string>
+    <string name="action_finish">Concluir</string>
+    <string name="action_finish_count">Concluir (%1$d)</string>
 
     <!-- Rule errors -->
     <string name="error_name_required">Informe o nome</string>

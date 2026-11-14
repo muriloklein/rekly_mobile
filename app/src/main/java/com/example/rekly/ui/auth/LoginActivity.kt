@@ -11,6 +11,7 @@ import com.example.rekly.data.local.AppDatabase
 import com.example.rekly.data.repository.UserRepository
 import com.example.rekly.databinding.ActivityLoginBinding
 import com.example.rekly.ui.main.MainActivity
+import com.example.rekly.ui.onboarding.OnboardingActivity
 import com.example.rekly.util.SessionManager
 import com.example.rekly.util.applyFormScreenInsets
 import com.example.rekly.util.messageRes
@@ -59,8 +60,13 @@ class LoginActivity : AppCompatActivity() {
 
         state.loggedInUserId?.let { userId ->
             sessionManager.save(userId)
-            openMain()
+            if (state.needsOnboarding) openOnboarding() else openMain()
         }
+    }
+
+    private fun openOnboarding() {
+        startActivity(OnboardingActivity.newTask(this))
+        finish()
     }
 
     private fun openMain() {

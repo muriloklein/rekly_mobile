@@ -65,7 +65,10 @@ class MainActivity : AppCompatActivity() {
 
         // On first launch shows the Summary; after rotation the fragment was already restored
         if (savedInstanceState == null) {
-            showTab(R.id.nav_summary)
+            val firstTab =
+                if (intent.getBooleanExtra(EXTRA_OPEN_SUBSCRIPTIONS, false)) R.id.nav_subscriptions else R.id.nav_summary
+            showTab(firstTab)
+            binding.bottomNavigation.menu.findItem(firstTab).isChecked = true
         }
     }
 
@@ -126,8 +129,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newTask(context: Context): Intent =
+        private const val EXTRA_OPEN_SUBSCRIPTIONS = "open_subscriptions"
+
+        fun newTask(context: Context, openSubscriptions: Boolean = false): Intent =
             Intent(context, MainActivity::class.java)
+                .putExtra(EXTRA_OPEN_SUBSCRIPTIONS, openSubscriptions)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
     }
 }

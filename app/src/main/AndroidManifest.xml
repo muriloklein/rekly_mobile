@@ -27,6 +27,9 @@
             android:label="@string/title_sign_up"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".ui.onboarding.OnboardingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.main.MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
