@@ -40,5 +40,7 @@ class UserRepository(private val userDao: UserDao) {
         return OperationResult.Success(user)
     }
 
+    suspend fun completeOnboarding(userId: Long) = userDao.markOnboardingCompleted(userId)
+
     private fun normalizeEmail(email: String): String = email.trim().lowercase()
 }

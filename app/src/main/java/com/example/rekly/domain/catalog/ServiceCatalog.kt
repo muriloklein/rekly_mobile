@@ -1,7 +1,9 @@
 package com.example.rekly.domain.catalog
 
+import com.example.rekly.data.entity.Subscription
 import com.example.rekly.data.local.DefaultCategories
 import com.example.rekly.domain.model.BillingPeriod
+import java.time.LocalDate
 
 /**
  * Fixed list of common services and bills, used by the subscription form and by the
@@ -51,4 +53,16 @@ object ServiceCatalog {
 
     /** Services grouped by category id, keeping the order of the list above. */
     fun groupedByCategory(): Map<Long, List<CatalogService>> = services.groupBy { it.categoryId }
+
+    fun toSubscriptions(serviceIds: Collection<String>, userId: Long, today: LocalDate): List<Subscription> =
+        services.filter { it.id in serviceIds }.map { service ->
+            Subscription(
+                userId = userId,
+                categoryId = service.categoryId,
+                serviceName = service.name,
+                variableAmount = service.variableAmount,
+                period = service.period,
+                createdAt = today
+            )
+        }
 }

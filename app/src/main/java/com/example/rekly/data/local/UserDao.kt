@@ -13,4 +13,7 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
     suspend fun findByEmail(email: String): User?
+
+    @Query("UPDATE users SET onboardingCompleted = 1 WHERE id = :userId")
+    suspend fun markOnboardingCompleted(userId: Long)
 }
