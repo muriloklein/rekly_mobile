@@ -77,5 +77,14 @@
     <!-- Fragments (placeholder content until the next tasks) -->
     <string name="summary_empty">O resumo do mês vai aparecer aqui</string>
     <string name="subscriptions_empty">Nenhuma assinatura cadastrada ainda</string>
+    <string name="subscriptions_no_results">Nenhuma assinatura encontrada</string>
+    <string name="label_search">Buscar pelo nome</string>
+    <string name="filter_all">Todas</string>
+    <string name="filter_active">Ativas</string>
+    <string name="filter_trial">Em teste</string>
+    <string name="filter_canceled">Canceladas</string>
+    <string name="subscription_item_detail">%1$s · %2$s</string>
+    <string name="subscription_monthly_amount">%1$s/mês</string>
+    <string name="subscription_missing_amount">Falta valor</string>
     <string name="profile_empty">Seus dados e as categorias vão aparecer aqui</string>
 </resources>

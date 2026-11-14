@@ -3,4 +3,5 @@
     <dimen name="spacing_small">8dp</dimen>
     <dimen name="spacing_medium">16dp</dimen>
     <dimen name="spacing_large">24dp</dimen>
+    <dimen name="list_bottom_clearance">88dp</dimen>
 </resources>
