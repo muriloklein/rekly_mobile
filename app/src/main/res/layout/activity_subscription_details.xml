@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.subscription.SubscriptionDetailsActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_large">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/incompleteCard"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_medium">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_incomplete"
+                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/completeButton"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/action_complete" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:id="@+id/numbersGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/amountRow"
+                    layout="@layout/layout_detail_row" />
+
+                <include
+                    android:id="@+id/monthlyRow"
+                    layout="@layout/layout_detail_row" />
+
+                <include
+                    android:id="@+id/realCostRow"
+                    layout="@layout/layout_detail_row" />
+
+                <include
+                    android:id="@+id/nextDueDateRow"
+                    layout="@layout/layout_detail_row" />
+
+                <include
+                    android:id="@+id/startDateRow"
+                    layout="@layout/layout_detail_row" />
+
+                <include
+                    android:id="@+id/billingDayRow"
+                    layout="@layout/layout_detail_row" />
+            </LinearLayout>
+
+            <include
+                android:id="@+id/categoryRow"
+                layout="@layout/layout_detail_row" />
+
+            <include
+                android:id="@+id/statusRow"
+                layout="@layout/layout_detail_row" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:text="@string/action_cancel_subscription" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteButton"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="@string/action_delete_subscription"
+                android:textColor="?attr/colorError" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

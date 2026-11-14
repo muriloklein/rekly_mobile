@@ -11,6 +11,7 @@ import com.example.rekly.data.local.AppDatabase
 import com.example.rekly.data.repository.SubscriptionRepository
 import com.example.rekly.databinding.FragmentSubscriptionsBinding
 import com.example.rekly.domain.model.SubscriptionStatus
+import com.example.rekly.ui.subscription.SubscriptionDetailsActivity
 import com.example.rekly.util.SessionManager
 
 class SubscriptionsFragment : Fragment(R.layout.fragment_subscriptions) {
@@ -21,7 +22,9 @@ class SubscriptionsFragment : Fragment(R.layout.fragment_subscriptions) {
     private val binding get() = _binding!!
 
     private var userId: Long = 0
-    private val adapter = SubscriptionListAdapter()
+    private val adapter = SubscriptionListAdapter { subscriptionId ->
+        startActivity(SubscriptionDetailsActivity.newIntent(requireContext(), subscriptionId))
+    }
 
     private val viewModel: SubscriptionsViewModel by viewModels {
         val database = AppDatabase.getInstance(requireContext())

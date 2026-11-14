@@ -53,6 +53,24 @@
     <string name="helper_participants">Pessoas que dividem o gasto</string>
     <string name="action_save">Salvar</string>
     <string name="action_choose_from_catalog">Escolher do catálogo</string>
+    <string name="label_monthly">Mensalidade</string>
+    <string name="label_real_cost">Custo real</string>
+    <string name="label_next_due_date">Próximo vencimento</string>
+    <string name="detail_amount_period">%1$s · %2$s</string>
+    <string name="detail_real_cost_split">%1$s por pessoa · dividido entre %2$d</string>
+    <string name="detail_no_due_date">Nenhum, a assinatura está cancelada</string>
+    <string name="detail_billing_day">Dia %1$d</string>
+    <string name="detail_incomplete">Faltam o valor, a data de início e o dia de cobrança para esta assinatura entrar nos totais.</string>
+    <string name="action_complete">Completar dados</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_cancel_subscription">Cancelar assinatura</string>
+    <string name="action_delete_subscription">Excluir assinatura</string>
+    <string name="action_delete">Excluir</string>
+    <string name="action_back">Voltar</string>
+    <string name="dialog_cancel_title">Cancelar esta assinatura?</string>
+    <string name="dialog_cancel_message">Ela deixa de gerar pagamentos, mas o histórico continua guardado.</string>
+    <string name="dialog_delete_title">Excluir esta assinatura?</string>
+    <string name="dialog_delete_message">Esta ação não pode ser desfeita.</string>
 
     <!-- Service catalog -->
     <string name="catalog_title">O que você quer cadastrar?</string>

@@ -13,8 +13,9 @@ import com.example.rekly.domain.rules.ExpenseCalculator
 import com.example.rekly.util.MoneyFormatter
 import com.example.rekly.util.labelRes
 
-class SubscriptionListAdapter :
-    ListAdapter<SubscriptionWithCategory, SubscriptionListAdapter.ViewHolder>(DiffCallback) {
+class SubscriptionListAdapter(
+    private val onItemClick: (subscriptionId: Long) -> Unit
+) : ListAdapter<SubscriptionWithCategory, SubscriptionListAdapter.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(ItemSubscriptionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -23,7 +24,7 @@ class SubscriptionListAdapter :
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(private val binding: ItemSubscriptionBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemSubscriptionBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: SubscriptionWithCategory) {
             val context = binding.root.context
@@ -38,6 +39,7 @@ class SubscriptionListAdapter :
             monthlyCents?.let {
                 binding.amountText.text = context.getString(R.string.subscription_monthly_amount, MoneyFormatter.format(it))
             }
+            binding.root.setOnClickListener { onItemClick(subscription.id) }
         }
     }
 
