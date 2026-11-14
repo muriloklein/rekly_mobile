@@ -155,7 +155,7 @@ Antes de começar o dia, cada um faz `git pull` na `develop` para pegar o que o 
 | 5 | Catálogo de serviços | Murilo | 2 | Lista de serviços e contas + BottomSheet de escolha | ✅ Concluída (já ligado ao formulário de assinatura) |
 | 6 | CRUD de assinaturas | Guilherme | 4, 5 | Lista, formulário com catálogo, detalhe, editar, cancelar, excluir (o `SubscriptionRepository` já existe) | ✅ Concluída |
 | 7 | CRUD de categorias | Murilo | 2 | Tela de categorias com CRUD completo (o `CategoryRepository` já existe) | ⬜ |
-| 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote | ⬜ |
+| 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote | ✅ Concluída |
 | 9 | Pagamentos | Guilherme | 6 | Chamar a geração presumida ao abrir a Main, confirmar pendentes e mostrar o histórico no detalhe | 🟡 A lógica (`PaymentGenerator`, `PaymentRepository`) foi adiantada pelo Murilo na tarefa 2; falta a parte de tela |
 | 10 | Dashboard | Murilo | 9 | Fragment Resumo com totais, vencimentos, pendentes e sugestões (os cálculos já estão no `ExpenseCalculator`) | ⬜ |
 | 11 | Notificações | Murilo | 9 | Lembrete diário com WorkManager (extra) | ⬜ |
