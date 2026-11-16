@@ -158,4 +158,29 @@ class ValidatorsTest {
         assertNull(Validators.validateStartDate(today, today))
         assertNull(Validators.validateStartDate(LocalDate.of(2022, 5, 10), today))
     }
+
+    @Test
+    fun blank_category_name_is_required() {
+        assertEquals(RuleError.NAME_REQUIRED, Validators.validateCategoryName("   "))
+    }
+
+    @Test
+    fun category_name_with_one_letter_is_valid() {
+        assertNull(Validators.validateCategoryName("X"))
+    }
+
+    @Test
+    fun category_name_with_30_letters_is_valid() {
+        assertNull(Validators.validateCategoryName("a".repeat(30)))
+    }
+
+    @Test
+    fun category_name_with_31_letters_is_too_long() {
+        assertEquals(RuleError.NAME_TOO_LONG, Validators.validateCategoryName("a".repeat(31)))
+    }
+
+    @Test
+    fun category_name_length_ignores_surrounding_spaces() {
+        assertNull(Validators.validateCategoryName("  " + "a".repeat(30) + "  "))
+    }
 }
