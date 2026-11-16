@@ -1,5 +1,6 @@
 package com.example.rekly.data.repository
 
+import androidx.lifecycle.LiveData
 import com.example.rekly.data.entity.User
 import com.example.rekly.data.local.UserDao
 import com.example.rekly.domain.model.OperationResult
@@ -8,6 +9,8 @@ import com.example.rekly.domain.rules.PasswordHasher
 import java.time.LocalDate
 
 class UserRepository(private val userDao: UserDao) {
+
+    fun observe(userId: Long): LiveData<User?> = userDao.observeById(userId)
 
     suspend fun register(
         name: String,
