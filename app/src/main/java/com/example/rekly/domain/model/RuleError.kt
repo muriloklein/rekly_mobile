@@ -36,5 +36,8 @@ enum class RuleError {
     START_DATE_IN_FUTURE,
 
     /** Same error for unknown e-mail and wrong password, so it does not reveal which e-mails exist. */
-    INVALID_CREDENTIALS
+    INVALID_CREDENTIALS,
+
+    /** Category name longer than the list and the form fields can show. */
+    NAME_TOO_LONG
 }

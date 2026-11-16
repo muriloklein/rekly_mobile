@@ -6,6 +6,7 @@ import com.example.rekly.data.local.CategoryDao
 import com.example.rekly.data.local.SubscriptionDao
 import com.example.rekly.domain.model.OperationResult
 import com.example.rekly.domain.model.RuleError
+import com.example.rekly.domain.rules.Validators
 
 class CategoryRepository(
     private val categoryDao: CategoryDao,
@@ -48,10 +49,8 @@ class CategoryRepository(
         return OperationResult.Success(Unit)
     }
 
+    // Checks the format first so an invalid name does not even reach the database
     private suspend fun validateName(userId: Long, name: String, ignoreId: Long): RuleError? =
-        when {
-            name.isEmpty() -> RuleError.NAME_REQUIRED
-            categoryDao.countWithName(userId, name, ignoreId) > 0 -> RuleError.DUPLICATE_NAME
-            else -> null
-        }
+        Validators.validateCategoryName(name)
+            ?: RuleError.DUPLICATE_NAME.takeIf { categoryDao.countWithName(userId, name, ignoreId) > 0 }
 }

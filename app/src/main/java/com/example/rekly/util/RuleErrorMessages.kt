@@ -25,4 +25,5 @@ fun RuleError.messageRes(): Int = when (this) {
     RuleError.START_DATE_REQUIRED -> R.string.error_start_date_required
     RuleError.START_DATE_IN_FUTURE -> R.string.error_start_date_in_future
     RuleError.INVALID_CREDENTIALS -> R.string.error_invalid_credentials
+    RuleError.NAME_TOO_LONG -> R.string.error_name_too_long
 }

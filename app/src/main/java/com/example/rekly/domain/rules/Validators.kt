@@ -7,6 +7,7 @@ object Validators {
 
     private const val MIN_NAME_LENGTH = 3
     private const val MIN_PASSWORD_LENGTH = 6
+    private const val MAX_CATEGORY_NAME_LENGTH = 30
     private val billingDays = 1..31
     private val emailFormat = Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
 
@@ -30,6 +31,13 @@ object Validators {
 
     fun validateServiceName(name: String): RuleError? =
         if (name.isBlank()) RuleError.NAME_REQUIRED else null
+
+    /** Format only; whether the name is already taken is checked by the repository. */
+    fun validateCategoryName(name: String): RuleError? = when {
+        name.isBlank() -> RuleError.NAME_REQUIRED
+        name.trim().length > MAX_CATEGORY_NAME_LENGTH -> RuleError.NAME_TOO_LONG
+        else -> null
+    }
 
     fun validateCategory(categoryId: Long?): RuleError? =
         if (categoryId == null) RuleError.CATEGORY_REQUIRED else null
