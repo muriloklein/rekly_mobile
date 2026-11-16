@@ -154,7 +154,7 @@ Antes de começar o dia, cada um faz `git pull` na `develop` para pegar o que o 
 | 4 | Navegação principal | Murilo | 1 | MainActivity, BottomNavigation, 3 Fragments vazios | ✅ Concluída |
 | 5 | Catálogo de serviços | Murilo | 2 | Lista de serviços e contas + BottomSheet de escolha | ✅ Concluída (já ligado ao formulário de assinatura) |
 | 6 | CRUD de assinaturas | Guilherme | 4, 5 | Lista, formulário com catálogo, detalhe, editar, cancelar, excluir (o `SubscriptionRepository` já existe) | ✅ Concluída |
-| 7 | CRUD de categorias | Murilo | 2 | Tela de categorias com CRUD completo (o `CategoryRepository` já existe) | ⬜ |
+| 7 | CRUD de categorias | Murilo | 2 | Tela de categorias com CRUD completo (o `CategoryRepository` já existe) | ✅ Concluída (Perfil também mostra nome e e-mail) |
 | 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote | ✅ Concluída |
 | 9 | Pagamentos | Guilherme | 6 | Chamar a geração presumida ao abrir a Main, confirmar pendentes e mostrar o histórico no detalhe | 🟡 A lógica (`PaymentGenerator`, `PaymentRepository`) foi adiantada pelo Murilo na tarefa 2; falta a parte de tela |
 | 10 | Dashboard | Murilo | 9 | Fragment Resumo com totais, vencimentos, pendentes e sugestões (os cálculos já estão no `ExpenseCalculator`) | ⬜ |
@@ -187,7 +187,7 @@ Tipos usados: `feat`, `fix`, `refactor`, `style`, `test`, `docs`, `chore`.
 O trabalho cabe em 4 etapas; o app precisa estar completo no fim da etapa 3, deixando a 4 só para polimento e apresentação. Falta definir a data de entrega para transformar etapas em semanas.
 
 1. **Base** — tarefas 1, 2 e 4. Ao fim: app abre, banco criado, navegação vazia funcionando. ✅ Concluída e mesclada na `main`.
-2. **Núcleo** — tarefas 3, 5, 6 e 7. Ao fim: login real, catálogo e os dois CRUDs completos.
+2. **Núcleo** — tarefas 3, 5, 6 e 7. Ao fim: login real, catálogo e os dois CRUDs completos. ✅ Concluída.
 3. **Menos trabalho manual** — tarefas 8, 9 e 10. Ao fim: onboarding, pagamentos automáticos e dashboard.
 4. **Entrega** — tarefas 11 (se der tempo) e 12, testes no aparelho, ensaio da apresentação.
 
