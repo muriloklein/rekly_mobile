@@ -40,6 +40,10 @@
         <activity
             android:name=".ui.subscription.SubscriptionDetailsActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.category.CategoriesActivity"
+            android:exported="false"
+            android:label="@string/title_categories" />
     </application>
 
 </manifest>
