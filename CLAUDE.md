@@ -99,6 +99,7 @@ Arquivo novo vai para o pacote da sua camada. Se não couber em nenhum, pergunte
 - Validação mora em `domain/rules/Validators` (testável); a Activity só exibe o resultado.
 - Assinatura: nome obrigatório; valor > 0; dia de cobrança 1–31; participantes ≥ 1; data de início não futura; período e status válidos.
 - Cadastro: nome ≥ 3 caracteres; e-mail válido e não cadastrado; senha ≥ 6; confirmação igual.
+- Categoria: nome obrigatório, até 30 caracteres e único entre as padrão e as do usuário (sem diferenciar maiúsculas).
 
 ## UI e ciclo de vida
 
