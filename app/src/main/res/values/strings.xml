@@ -40,6 +40,7 @@
     <string name="error_invalid_participants">Informe pelo menos 1 participante</string>
     <string name="error_start_date_required">Informe a data de início</string>
     <string name="error_start_date_in_future">A data de início não pode ser no futuro</string>
+    <string name="error_name_too_long">Use até 30 caracteres</string>
 
     <!-- Subscription form -->
     <string name="title_new_subscription">Nova assinatura</string>
@@ -110,5 +111,19 @@
     <string name="subscription_item_detail">%1$s · %2$s</string>
     <string name="subscription_monthly_amount">%1$s/mês</string>
     <string name="subscription_missing_amount">Falta valor</string>
-    <string name="profile_empty">Seus dados e as categorias vão aparecer aqui</string>
+
+    <!-- Profile -->
+    <string name="action_manage_categories">Categorias</string>
+
+    <!-- Categories -->
+    <string name="title_categories">Categorias</string>
+    <string name="categories_hint">As categorias padrão do app não podem ser alteradas. Crie as suas para organizar os gastos do seu jeito.</string>
+    <string name="label_default_category">Padrão</string>
+    <string name="label_category_name">Nome da categoria</string>
+    <string name="action_new_category">Nova categoria</string>
+    <string name="action_rename">Renomear</string>
+    <string name="title_new_category">Nova categoria</string>
+    <string name="title_rename_category">Renomear categoria</string>
+    <string name="dialog_delete_category_title">Excluir esta categoria?</string>
+    <string name="dialog_delete_category_message">A categoria \"%1$s\" será excluída. Esta ação não pode ser desfeita.</string>
 </resources>
