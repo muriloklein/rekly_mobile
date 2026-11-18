@@ -75,6 +75,37 @@ object ExpenseCalculator {
         subscriptions.filter { it.status == SubscriptionStatus.ACTIVE }
             .sumOf { realCostCents(it) ?: 0L }
 
+    /** What the TRIAL subscriptions will cost per month if they are not canceled in time. */
+    fun trialMonthlyTotalCents(subscriptions: List<Subscription>): Long =
+        subscriptions.filter { it.status == SubscriptionStatus.TRIAL }
+            .sumOf { monthlyCents(it) ?: 0L }
+
+    /** Monthly amount per category id (ACTIVE and complete only), largest first. */
+    fun monthlyByCategory(subscriptions: List<Subscription>): List<Pair<Long, Long>> =
+        subscriptions.filter { it.status == SubscriptionStatus.ACTIVE && it.isComplete() }
+            .groupBy { it.categoryId }
+            .map { (categoryId, items) -> categoryId to items.sumOf { monthlyCents(it) ?: 0L } }
+            .sortedByDescending { (_, cents) -> cents }
+
+    /**
+     * ACTIVE and complete subscriptions whose next due date is between [today] and [days]
+     * days ahead (both inclusive), soonest first.
+     */
+    fun upcomingDueDates(
+        subscriptions: List<Subscription>,
+        today: LocalDate,
+        days: Long
+    ): List<Pair<Subscription, LocalDate>> {
+        val limit = today.plusDays(days)
+        return subscriptions.filter { it.status == SubscriptionStatus.ACTIVE && it.isComplete() }
+            .mapNotNull { subscription ->
+                nextDueDate(subscription, today)
+                    ?.takeIf { !it.isAfter(limit) }
+                    ?.let { dueDate -> subscription to dueDate }
+            }
+            .sortedBy { (_, dueDate) -> dueDate }
+    }
+
     /** Integer division rounding half up (non-negative values). */
     private fun divideRounding(value: Long, divisor: Long): Long =
         (value * 2 + divisor) / (divisor * 2)
