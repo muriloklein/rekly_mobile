@@ -19,11 +19,13 @@ class ExpenseCalculatorTest {
         status: SubscriptionStatus = SubscriptionStatus.ACTIVE,
         participants: Int = 1,
         startDate: LocalDate? = LocalDate.of(2026, 1, 10),
-        billingDay: Int? = 10
+        billingDay: Int? = 10,
+        categoryId: Long = 1,
+        serviceName: String = "Netflix"
     ) = Subscription(
         userId = 1,
-        categoryId = 1,
-        serviceName = "Netflix",
+        categoryId = categoryId,
+        serviceName = serviceName,
         amountCents = amountCents,
         period = period,
         startDate = startDate,
@@ -143,5 +145,55 @@ class ExpenseCalculatorTest {
         )
         assertEquals(4990L, ExpenseCalculator.monthlyTotalCents(subscriptions))
         assertEquals(2995L, ExpenseCalculator.realCostTotalCents(subscriptions))
+    }
+
+    // Summary
+
+    @Test
+    fun trial_total_counts_only_trial_subscriptions() {
+        val subscriptions = listOf(
+            subscription(amountCents = 2190, status = SubscriptionStatus.TRIAL),
+            subscription(amountCents = 12000, period = BillingPeriod.ANNUAL, status = SubscriptionStatus.TRIAL), // 10,00
+            subscription(amountCents = 3990),
+            subscription(amountCents = null, status = SubscriptionStatus.TRIAL)
+        )
+        assertEquals(3190L, ExpenseCalculator.trialMonthlyTotalCents(subscriptions))
+    }
+
+    @Test
+    fun spending_by_category_sums_monthly_amounts_largest_first() {
+        val subscriptions = listOf(
+            subscription(amountCents = 3990, categoryId = 1),
+            subscription(amountCents = 12000, period = BillingPeriod.ANNUAL, categoryId = 1), // 10,00
+            subscription(amountCents = 150000, categoryId = 3),
+            subscription(amountCents = 2190, categoryId = 2, status = SubscriptionStatus.TRIAL),
+            subscription(amountCents = null, categoryId = 4)
+        )
+        assertEquals(listOf(3L to 150000L, 1L to 4990L), ExpenseCalculator.monthlyByCategory(subscriptions))
+    }
+
+    @Test
+    fun upcoming_includes_due_dates_from_today_up_to_seven_days() {
+        val subscriptions = listOf(
+            subscription(billingDay = 29, serviceName = "Day 29"), // 8 days ahead: out
+            subscription(billingDay = 28, serviceName = "Day 28"), // exactly 7 days ahead: in
+            subscription(billingDay = 21, serviceName = "Today"),
+            subscription(billingDay = 10, serviceName = "Day 10") // already passed: next is in November
+        )
+
+        val upcoming = ExpenseCalculator.upcomingDueDates(subscriptions, today, 7)
+
+        assertEquals(listOf("Today", "Day 28"), upcoming.map { (subscription, _) -> subscription.serviceName })
+        assertEquals(listOf(today, LocalDate.of(2026, 10, 28)), upcoming.map { (_, dueDate) -> dueDate })
+    }
+
+    @Test
+    fun upcoming_ignores_trial_canceled_and_incomplete() {
+        val subscriptions = listOf(
+            subscription(billingDay = 22, status = SubscriptionStatus.TRIAL),
+            subscription(billingDay = 22, status = SubscriptionStatus.CANCELED),
+            subscription(billingDay = 22, amountCents = null)
+        )
+        assertEquals(emptyList<Pair<Subscription, LocalDate>>(), ExpenseCalculator.upcomingDueDates(subscriptions, today, 7))
     }
 }
