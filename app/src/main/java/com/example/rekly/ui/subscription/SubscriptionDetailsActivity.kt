@@ -11,9 +11,11 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.rekly.R
+import com.example.rekly.data.entity.Payment
 import com.example.rekly.data.entity.Subscription
 import com.example.rekly.data.entity.SubscriptionDetails
 import com.example.rekly.data.local.AppDatabase
+import com.example.rekly.data.repository.PaymentRepository
 import com.example.rekly.data.repository.SubscriptionRepository
 import com.example.rekly.databinding.ActivitySubscriptionDetailsBinding
 import com.example.rekly.databinding.LayoutDetailRowBinding
@@ -38,12 +40,13 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
     private val subscriptionId: Long
         get() = intent.getLongExtra(EXTRA_SUBSCRIPTION_ID, NO_ID)
 
-    private val paymentAdapter = PaymentAdapter()
+    private val paymentAdapter = PaymentAdapter { payment -> openConfirmPayment(payment) }
 
     private val viewModel: SubscriptionDetailsViewModel by viewModels {
         val database = AppDatabase.getInstance(this)
         SubscriptionDetailsViewModel.factory(
             SubscriptionRepository(database.subscriptionDao(), database.paymentDao()),
+            PaymentRepository(database.subscriptionDao(), database.paymentDao()),
             userId,
             subscriptionId
         )
@@ -70,6 +73,12 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
         applyFormScreenInsets(binding.root, binding.toolbar.root)
         setUpLabels()
         binding.paymentsList.adapter = paymentAdapter
+        supportFragmentManager.setFragmentResultListener(ConfirmPaymentBottomSheet.REQUEST_KEY, this) { _, result ->
+            viewModel.confirmPayment(
+                ConfirmPaymentBottomSheet.paymentId(result),
+                ConfirmPaymentBottomSheet.amountCents(result)
+            )
+        }
 
         binding.completeButton.setOnClickListener { openEdit() }
         binding.cancelButton.setOnClickListener { confirmCancel() }
@@ -184,6 +193,12 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
             .setNegativeButton(R.string.action_back, null)
             .setPositiveButton(action) { _, _ -> onConfirm() }
             .show()
+    }
+
+    private fun openConfirmPayment(payment: Payment) {
+        val month = DateFormatter.formatMonth(payment.referenceMonth)
+        ConfirmPaymentBottomSheet.newInstance(payment.id, month, payment.amountCents)
+            .show(supportFragmentManager, ConfirmPaymentBottomSheet.TAG)
     }
 
     private fun openEdit() {

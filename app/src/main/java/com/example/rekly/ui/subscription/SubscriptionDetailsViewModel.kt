@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.rekly.data.entity.Subscription
 import com.example.rekly.data.entity.SubscriptionDetails
+import com.example.rekly.data.repository.PaymentRepository
 import com.example.rekly.data.repository.SubscriptionRepository
 import com.example.rekly.domain.model.OperationResult
 import com.example.rekly.domain.model.RuleError
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class SubscriptionDetailsViewModel(
     private val subscriptionRepository: SubscriptionRepository,
+    private val paymentRepository: PaymentRepository,
     userId: Long,
     subscriptionId: Long
 ) : ViewModel() {
@@ -32,6 +34,15 @@ class SubscriptionDetailsViewModel(
 
     fun delete() = runOnCurrent { subscriptionRepository.delete(it) }
 
+    /** Only a payment of the subscription on screen can be confirmed. */
+    fun confirmPayment(paymentId: Long, amountCents: Long) {
+        val payment = details.value?.payments?.firstOrNull { it.id == paymentId } ?: return
+        viewModelScope.launch {
+            val result = paymentRepository.confirm(payment, amountCents)
+            if (result is OperationResult.Failure) _error.value = result.error
+        }
+    }
+
     fun onErrorShown() {
         _error.value = null
     }
@@ -45,9 +56,13 @@ class SubscriptionDetailsViewModel(
     }
 
     companion object {
-        fun factory(subscriptionRepository: SubscriptionRepository, userId: Long, subscriptionId: Long) =
-            viewModelFactory {
-                initializer { SubscriptionDetailsViewModel(subscriptionRepository, userId, subscriptionId) }
-            }
+        fun factory(
+            subscriptionRepository: SubscriptionRepository,
+            paymentRepository: PaymentRepository,
+            userId: Long,
+            subscriptionId: Long
+        ) = viewModelFactory {
+            initializer { SubscriptionDetailsViewModel(subscriptionRepository, paymentRepository, userId, subscriptionId) }
+        }
     }
 }

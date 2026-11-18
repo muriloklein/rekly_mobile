@@ -2,6 +2,7 @@ package com.example.rekly.ui.subscription
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,9 @@ import com.example.rekly.util.DateFormatter
 import com.example.rekly.util.MoneyFormatter
 import com.example.rekly.util.labelRes
 
-class PaymentAdapter : ListAdapter<Payment, PaymentAdapter.ViewHolder>(DiffCallback) {
+class PaymentAdapter(
+    private val onConfirmClick: (Payment) -> Unit
+) : ListAdapter<Payment, PaymentAdapter.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(ItemPaymentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -22,7 +25,7 @@ class PaymentAdapter : ListAdapter<Payment, PaymentAdapter.ViewHolder>(DiffCallb
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(private val binding: ItemPaymentBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemPaymentBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(payment: Payment) {
             val context = binding.root.context
@@ -37,6 +40,8 @@ class PaymentAdapter : ListAdapter<Payment, PaymentAdapter.ViewHolder>(DiffCallb
             } else {
                 context.getString(R.string.payment_due_on, DateFormatter.format(payment.dueDate))
             }
+            binding.confirmButton.isVisible = !isPaid
+            binding.confirmButton.setOnClickListener { onConfirmClick(payment) }
         }
     }
 

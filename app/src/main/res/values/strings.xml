@@ -101,6 +101,11 @@
     <string name="payment_paid_on">Pago em %1$s</string>
     <string name="payment_due_on">Vence em %1$s</string>
     <string name="payment_amount_estimate">%1$s (estimado)</string>
+    <string name="action_confirm_value">Confirmar valor</string>
+    <string name="payment_confirm_title">Confirmar pagamento de %1$s</string>
+    <string name="payment_confirm_helper">Começamos pelo valor estimado. Ajuste para o valor real da conta.</string>
+    <string name="label_paid_amount">Valor pago</string>
+    <string name="action_confirm">Confirmar</string>
 
     <!-- Main navigation -->
     <string name="tab_summary">Resumo</string>
