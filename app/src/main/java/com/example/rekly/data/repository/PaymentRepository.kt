@@ -1,5 +1,6 @@
 package com.example.rekly.data.repository
 
+import androidx.lifecycle.LiveData
 import com.example.rekly.data.entity.Payment
 import com.example.rekly.data.local.PaymentDao
 import com.example.rekly.data.local.SubscriptionDao
@@ -14,6 +15,10 @@ class PaymentRepository(
     private val subscriptionDao: SubscriptionDao,
     private val paymentDao: PaymentDao
 ) {
+
+    /** Variable bills waiting for the user to confirm the real amount. */
+    fun observePending(userId: Long): LiveData<List<Payment>> =
+        paymentDao.observeByUserAndStatus(userId, PaymentStatus.PENDING)
 
     /**
      * Generates the presumed payments for all of the user's active subscriptions.
