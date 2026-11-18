@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.Insets
@@ -13,6 +14,8 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.example.rekly.R
+import com.example.rekly.data.local.AppDatabase
+import com.example.rekly.data.repository.PaymentRepository
 import com.example.rekly.databinding.ActivityMainBinding
 import com.example.rekly.ui.auth.LoginActivity
 import com.example.rekly.ui.subscription.SubscriptionFormActivity
@@ -25,6 +28,11 @@ import com.example.rekly.util.SessionManager
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val viewModel: MainViewModel by viewModels {
+        val database = AppDatabase.getInstance(this)
+        MainViewModel.factory(PaymentRepository(database.subscriptionDao(), database.paymentDao()))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +47,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (SessionManager(this).loggedUserId() == null) {
+        val userId = SessionManager(this).loggedUserId()
+        if (userId == null) {
             startActivity(LoginActivity.newTask(this))
             finish()
+        } else {
+            viewModel.generatePayments(userId)
         }
     }
 

@@ -92,6 +92,15 @@
     <string name="status_active">Ativa</string>
     <string name="status_trial">Em teste</string>
     <string name="status_canceled">Cancelada</string>
+    <string name="payment_status_paid">Pago</string>
+    <string name="payment_status_pending">Pendente</string>
+
+    <!-- Payment history -->
+    <string name="payments_title">Histórico de pagamentos</string>
+    <string name="payments_empty">Nenhum pagamento ainda. Eles aparecem aqui a partir do vencimento.</string>
+    <string name="payment_paid_on">Pago em %1$s</string>
+    <string name="payment_due_on">Vence em %1$s</string>
+    <string name="payment_amount_estimate">%1$s (estimado)</string>
 
     <!-- Main navigation -->
     <string name="tab_summary">Resumo</string>

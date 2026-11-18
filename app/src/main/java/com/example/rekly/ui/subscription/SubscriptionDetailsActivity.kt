@@ -38,6 +38,8 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
     private val subscriptionId: Long
         get() = intent.getLongExtra(EXTRA_SUBSCRIPTION_ID, NO_ID)
 
+    private val paymentAdapter = PaymentAdapter()
+
     private val viewModel: SubscriptionDetailsViewModel by viewModels {
         val database = AppDatabase.getInstance(this)
         SubscriptionDetailsViewModel.factory(
@@ -67,6 +69,7 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         applyFormScreenInsets(binding.root, binding.toolbar.root)
         setUpLabels()
+        binding.paymentsList.adapter = paymentAdapter
 
         binding.completeButton.setOnClickListener { openEdit() }
         binding.cancelButton.setOnClickListener { confirmCancel() }
@@ -127,6 +130,10 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
         binding.categoryRow.valueText.text = details.category.name
         binding.statusRow.valueText.setText(subscription.status.labelRes())
         binding.cancelButton.isVisible = subscription.status != SubscriptionStatus.CANCELED
+
+        paymentAdapter.submitList(details.payments.sortedByDescending { it.referenceMonth })
+        binding.paymentsEmptyText.isVisible = details.payments.isEmpty()
+        binding.paymentsList.isVisible = details.payments.isNotEmpty()
     }
 
     private fun renderNumbers(subscription: Subscription) {
