@@ -156,8 +156,8 @@ Antes de começar o dia, cada um faz `git pull` na `develop` para pegar o que o 
 | 6 | CRUD de assinaturas | Guilherme | 4, 5 | Lista, formulário com catálogo, detalhe, editar, cancelar, excluir (o `SubscriptionRepository` já existe) | ✅ Concluída |
 | 7 | CRUD de categorias | Murilo | 2 | Tela de categorias com CRUD completo (o `CategoryRepository` já existe) | ✅ Concluída (Perfil também mostra nome e e-mail) |
 | 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote | ✅ Concluída |
-| 9 | Pagamentos | Guilherme | 6 | Chamar a geração presumida ao abrir a Main, confirmar pendentes e mostrar o histórico no detalhe | 🟡 A lógica (`PaymentGenerator`, `PaymentRepository`) foi adiantada pelo Murilo na tarefa 2; falta a parte de tela |
-| 10 | Dashboard | Murilo | 9 | Fragment Resumo com totais, vencimentos, pendentes e sugestões (os cálculos já estão no `ExpenseCalculator`) | ✅ Concluída (pendentes confirmados direto do Resumo) |
+| 9 | Pagamentos | Guilherme | 6 | Chamar a geração presumida ao abrir a Main, confirmar pendentes e mostrar o histórico no detalhe | ✅ Concluída (a lógica já vinha da tarefa 2; a geração ao abrir a Main, o histórico no detalhe e a confirmação com erro no campo vieram agora) |
+| 10 | Dashboard | Murilo | 9 | Fragment Resumo com totais, vencimentos, pendentes e sugestões (os cálculos já estão no `ExpenseCalculator`) | ⬜ |
 | 11 | Notificações | Murilo | 9 | Lembrete diário com WorkManager (extra) | ⬜ |
 | 12 | README e prints | Os dois | todas | README completo e pasta `prints/` | ⬜ |
 
@@ -195,12 +195,12 @@ O fim de cada etapa é um bom momento para fazer o merge da `develop` na `main`.
 
 ### Checklist
 
-- [ ] Professor adicionado como colaborador do repositório
+- [x] Professor adicionado como colaborador do repositório (convite enviado)
 - [x] Branch `develop` criada; `main` recebe só merges da `develop`
 - [x] Mínimo de 4 Activities declaradas no Manifest (plano tem 7)
 - [x] CRUD de assinaturas funcionando de ponta a ponta
 - [ ] Criar assinatura pelo catálogo em menos de 30 segundos
-- [ ] Pagamentos gerados ao abrir o app, sem duplicar ao abrir de novo
+- [x] Pagamentos gerados ao abrir o app, sem duplicar ao abrir de novo
 - [ ] Validações mostrando erro no próprio campo (`TextInputLayout.error`)
 - [ ] Dados persistem após fechar e reabrir o app
 - [ ] Rotação de tela não perde dados do formulário
