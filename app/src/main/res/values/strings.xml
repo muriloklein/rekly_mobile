@@ -142,6 +142,8 @@
 
     <!-- Subscriptions tab -->
     <string name="subscriptions_empty">Nenhuma assinatura cadastrada ainda</string>
+    <string name="subscriptions_empty_hint">Cadastre o que você paga todo mês e acompanhe seus gastos em um só lugar.</string>
+    <string name="action_register_subscription">Cadastrar assinatura</string>
     <string name="subscriptions_no_results">Nenhuma assinatura encontrada</string>
     <string name="label_search">Buscar pelo nome</string>
     <string name="filter_all">Todas</string>

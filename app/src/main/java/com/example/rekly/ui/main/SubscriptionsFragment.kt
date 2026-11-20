@@ -12,6 +12,7 @@ import com.example.rekly.data.repository.SubscriptionRepository
 import com.example.rekly.databinding.FragmentSubscriptionsBinding
 import com.example.rekly.domain.model.SubscriptionStatus
 import com.example.rekly.ui.subscription.SubscriptionDetailsActivity
+import com.example.rekly.ui.subscription.SubscriptionFormActivity
 import com.example.rekly.util.SessionManager
 
 class SubscriptionsFragment : Fragment(R.layout.fragment_subscriptions) {
@@ -44,15 +45,21 @@ class SubscriptionsFragment : Fragment(R.layout.fragment_subscriptions) {
         binding.statusChips.setOnCheckedStateChangeListener { _, checkedIds ->
             viewModel.filterBy(statusOfChip(checkedIds.firstOrNull()))
         }
+        binding.emptyButton.setOnClickListener {
+            startActivity(SubscriptionFormActivity.newIntent(requireContext()))
+        }
         viewModel.state.observe(viewLifecycleOwner) { render(it) }
     }
 
     private fun render(state: SubscriptionListState) {
         adapter.submitList(state.items)
-        binding.emptyText.isVisible = state.items.isEmpty()
+        binding.emptyState.isVisible = state.items.isEmpty()
         binding.emptyText.setText(
             if (state.hasAnySubscription) R.string.subscriptions_no_results else R.string.subscriptions_empty
         )
+        // The invitation to register only makes sense when there is nothing registered at all
+        binding.emptyHint.isVisible = !state.hasAnySubscription
+        binding.emptyButton.isVisible = !state.hasAnySubscription
     }
 
     private fun statusOfChip(chipId: Int?): SubscriptionStatus? = when (chipId) {
