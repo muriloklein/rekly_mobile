@@ -108,7 +108,7 @@ Exceção única: na tradução do código para inglês, quando só havia dados 
 - **Confirmar pagamento:** um pendente vira pago com um toque, permitindo ajustar o valor.
 - **Exclusão bloqueada** se a assinatura tiver pagamentos; a alternativa é cancelar, que interrompe a geração de novos pagamentos.
 - **Categoria** não pode ser excluída se tiver assinaturas, nem repetir o nome de uma categoria padrão ou do próprio usuário (sem diferenciar maiúsculas). Categorias padrão não são editáveis nem excluíveis.
-- **Sugestões**, calculadas na hora: duas ou mais assinaturas ativas na mesma categoria (sobreposição); assinatura em teste há mais de 30 dias ("vai começar a cobrar?"); pagamento pendente há mais de 7 dias.
+- **Sugestões**, calculadas na hora (`SavingsSuggestions`): duas ou mais assinaturas ativas na mesma categoria (sobreposição), só em Streaming e Música, onde um serviço substitui o outro (aluguel e luz em Moradia não são sobreposição); assinatura em teste há mais de 30 dias ("vai começar a cobrar?"); pagamento pendente há mais de 7 dias.
 - **Catálogo:** só preenche nome, categoria, período e se o valor é variável. Não traz preço, porque preços mudam e variam por plano.
 - **Senha** guardada como hash SHA-256 com salt, nunca em texto puro.
 
@@ -188,7 +188,7 @@ O trabalho cabe em 4 etapas; o app precisa estar completo no fim da etapa 3, dei
 
 1. **Base** — tarefas 1, 2 e 4. Ao fim: app abre, banco criado, navegação vazia funcionando. ✅ Concluída e mesclada na `main`.
 2. **Núcleo** — tarefas 3, 5, 6 e 7. Ao fim: login real, catálogo e os dois CRUDs completos. ✅ Concluída.
-3. **Menos trabalho manual** — tarefas 8, 9 e 10. Ao fim: onboarding, pagamentos automáticos e dashboard. Em andamento: tarefas 8 e 9 ✅, falta a 10.
+3. **Menos trabalho manual** — tarefas 8, 9 e 10. Ao fim: onboarding, pagamentos automáticos e dashboard. ✅ Concluída.
 4. **Entrega** — tarefas 11 (se der tempo) e 12, testes no aparelho, ensaio da apresentação.
 
 O fim de cada etapa é um bom momento para fazer o merge da `develop` na `main`.

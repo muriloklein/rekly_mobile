@@ -1,5 +1,6 @@
 package com.example.rekly.data.local
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -34,6 +35,15 @@ interface PaymentDao {
             "ORDER BY referenceMonth DESC LIMIT 1"
     )
     suspend fun lastAmount(subscriptionId: Long, status: PaymentStatus): Long?
+
+    /** Payments of the user with [status], oldest due date first. The join filters by the subscription's owner. */
+    @Query(
+        "SELECT payments.* FROM payments " +
+            "INNER JOIN subscriptions ON subscriptions.id = payments.subscriptionId " +
+            "WHERE subscriptions.userId = :userId AND payments.status = :status " +
+            "ORDER BY payments.dueDate"
+    )
+    fun observeByUserAndStatus(userId: Long, status: PaymentStatus): LiveData<List<Payment>>
 
     @Query("SELECT COUNT(*) FROM payments WHERE subscriptionId = :subscriptionId")
     suspend fun countBySubscription(subscriptionId: Long): Int

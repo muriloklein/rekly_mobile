@@ -88,7 +88,8 @@ Arquivo novo vai para o pacote da sua camada. Se não couber em nenhum, pergunte
 - Pendente vira pago com confirmação do usuário, podendo ajustar o valor.
 - **Exclusão** de assinatura bloqueada se houver pagamentos; a alternativa é cancelar. Cancelada não gera novos pagamentos.
 - **Categoria**: nome único por usuário; padrão não editável nem excluível; exclusão bloqueada se tiver assinaturas.
-- **Sugestões** (calculadas na hora, sem tabela): 2+ ativas na mesma categoria; em teste há mais de 30 dias; pagamento pendente há mais de 7 dias.
+- **Sugestões** (calculadas na hora, sem tabela, em `SavingsSuggestions`): 2+ ativas na mesma categoria, só em Streaming e Música; em teste há mais de 30 dias (desde a data de início); pagamento pendente há mais de 7 dias após o vencimento.
+- **Resumo**: totais só com ativas e completas; em teste e sem valor aparecem à parte; próximos vencimentos de hoje até 7 dias à frente.
 - **Catálogo** (`domain/catalog/ServiceCatalog`): preenche nome, categoria, período e `variableAmount`. Nunca preço (muda com o tempo). Telas trocam só o id do serviço.
 - **Senha**: hash SHA-256 com salt aleatório por usuário. Nunca salvar ou logar senha em texto puro.
 - Todo dado é filtrado pelo usuário logado (`userId` da sessão).

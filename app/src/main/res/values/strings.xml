@@ -113,8 +113,34 @@
     <string name="tab_profile">Perfil</string>
     <string name="action_new_subscription">Nova assinatura</string>
 
-    <!-- Fragments (placeholder content until the next tasks) -->
-    <string name="summary_empty">O resumo do mês vai aparecer aqui</string>
+    <!-- Summary -->
+    <string name="summary_empty">Cadastre sua primeira assinatura no botão + para ver o resumo do mês</string>
+    <string name="summary_monthly_total">Total por mês</string>
+    <string name="summary_real_cost">Seu custo real, já dividindo com outras pessoas: %1$s</string>
+    <plurals name="summary_trial">
+        <item quantity="one">%1$d assinatura em teste: %2$s por mês se você continuar</item>
+        <item quantity="many">%1$d assinaturas em teste: %2$s por mês se você continuar</item>
+        <item quantity="other">%1$d assinaturas em teste: %2$s por mês se você continuar</item>
+    </plurals>
+    <plurals name="summary_incomplete">
+        <item quantity="one">%1$d assinatura ainda sem valor não entra no total</item>
+        <item quantity="many">%1$d assinaturas ainda sem valor não entram no total</item>
+        <item quantity="other">%1$d assinaturas ainda sem valor não entram no total</item>
+    </plurals>
+    <string name="summary_upcoming_title">Próximos 7 dias</string>
+    <string name="summary_upcoming_empty">Nenhum vencimento nos próximos 7 dias</string>
+    <string name="summary_due_today">Vence hoje</string>
+    <string name="summary_due_tomorrow">Vence amanhã</string>
+    <string name="summary_pending_title">Pendentes a confirmar</string>
+    <string name="summary_pending_detail">Conta de %1$s · %2$s</string>
+    <string name="summary_categories_title">Gasto por categoria</string>
+    <string name="summary_category_share">%1$s · %2$d%%</string>
+    <string name="summary_suggestions_title">Sugestões de economia</string>
+    <string name="suggestion_overlap">Você tem %1$d assinaturas de %2$s ativas (%3$s). Vale manter todas?</string>
+    <string name="suggestion_long_trial">%1$s está em teste há %2$d dias. Ela vai começar a cobrar?</string>
+    <string name="suggestion_stale_pending">A conta de %1$s está pendente há %2$d dias. Confirme o valor real.</string>
+
+    <!-- Subscriptions tab -->
     <string name="subscriptions_empty">Nenhuma assinatura cadastrada ainda</string>
     <string name="subscriptions_no_results">Nenhuma assinatura encontrada</string>
     <string name="label_search">Buscar pelo nome</string>
