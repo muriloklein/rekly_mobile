@@ -12,7 +12,9 @@ import com.example.rekly.databinding.ItemPaymentBinding
 import com.example.rekly.domain.model.PaymentStatus
 import com.example.rekly.util.DateFormatter
 import com.example.rekly.util.MoneyFormatter
+import com.example.rekly.util.chipTone
 import com.example.rekly.util.labelRes
+import com.example.rekly.util.showChip
 
 class PaymentAdapter(
     private val onConfirmClick: (Payment) -> Unit
@@ -33,7 +35,7 @@ class PaymentAdapter(
             val isPaid = payment.status == PaymentStatus.PAID
 
             binding.monthText.text = DateFormatter.formatMonth(payment.referenceMonth)
-            binding.statusText.setText(payment.status.labelRes())
+            binding.statusChip.showChip(payment.status.labelRes(), payment.status.chipTone())
             binding.amountText.text = if (isPaid) amount else context.getString(R.string.payment_amount_estimate, amount)
             binding.detailText.text = if (isPaid) {
                 context.getString(R.string.payment_paid_on, DateFormatter.format(payment.paidDate ?: payment.dueDate))

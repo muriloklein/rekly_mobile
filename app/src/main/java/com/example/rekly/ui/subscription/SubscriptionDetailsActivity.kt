@@ -26,8 +26,12 @@ import com.example.rekly.util.DateFormatter
 import com.example.rekly.util.MoneyFormatter
 import com.example.rekly.util.SessionManager
 import com.example.rekly.util.applyFormScreenInsets
+import com.example.rekly.util.chipTone
 import com.example.rekly.util.labelRes
 import com.example.rekly.util.messageRes
+import com.example.rekly.util.monthlyAmountText
+import com.example.rekly.util.showCategoryAvatar
+import com.example.rekly.util.showChip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import java.time.LocalDate
@@ -119,25 +123,26 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
 
     private fun setUpLabels() {
         binding.amountRow.labelText.setText(R.string.label_amount)
-        binding.monthlyRow.labelText.setText(R.string.label_monthly)
         binding.realCostRow.labelText.setText(R.string.label_real_cost)
         binding.nextDueDateRow.labelText.setText(R.string.label_next_due_date)
         binding.startDateRow.labelText.setText(R.string.label_start_date)
         binding.billingDayRow.labelText.setText(R.string.label_billing_day)
-        binding.categoryRow.labelText.setText(R.string.label_category)
-        binding.statusRow.labelText.setText(R.string.label_status)
     }
 
     private fun render(details: SubscriptionDetails) {
         val subscription = details.subscription
         supportActionBar?.title = subscription.serviceName
 
+        binding.categoryIcon.showCategoryAvatar(details.category.id)
+        binding.categoryText.text = details.category.name
+        binding.statusChip.showChip(subscription.status.labelRes(), subscription.status.chipTone())
+
         binding.incompleteCard.isVisible = !subscription.isComplete()
         binding.numbersGroup.isVisible = subscription.isComplete()
+        binding.monthlyLabel.isVisible = subscription.isComplete()
+        binding.monthlyAmountText.isVisible = subscription.isComplete()
         if (subscription.isComplete()) renderNumbers(subscription)
 
-        binding.categoryRow.valueText.text = details.category.name
-        binding.statusRow.valueText.setText(subscription.status.labelRes())
         binding.cancelButton.isVisible = subscription.status != SubscriptionStatus.CANCELED
 
         paymentAdapter.submitList(details.payments.sortedByDescending { it.referenceMonth })
@@ -149,14 +154,14 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
         val amountCents = subscription.amountCents ?: return
         val startDate = subscription.startDate ?: return
         val billingDay = subscription.billingDay ?: return
-        val monthly = MoneyFormatter.format(ExpenseCalculator.monthlyCents(amountCents, subscription.period))
+        val monthlyCents = ExpenseCalculator.monthlyCents(amountCents, subscription.period)
         val realCost = MoneyFormatter.format(
             ExpenseCalculator.realCostCents(amountCents, subscription.period, subscription.participants)
         )
 
         binding.amountRow.valueText.text =
             getString(R.string.detail_amount_period, MoneyFormatter.format(amountCents), periodText(subscription))
-        binding.monthlyRow.valueText.text = monthly
+        binding.monthlyAmountText.text = monthlyAmountText(monthlyCents, SUFFIX_SIZE)
         binding.realCostRow.valueText.text = if (subscription.participants > 1) {
             getString(R.string.detail_real_cost_split, realCost, subscription.participants)
         } else {
@@ -213,6 +218,7 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
     companion object {
         private const val EXTRA_SUBSCRIPTION_ID = "subscription_id"
         private const val NO_ID = -1L
+        private const val SUFFIX_SIZE = 0.5f
 
         fun newIntent(context: Context, subscriptionId: Long): Intent =
             Intent(context, SubscriptionDetailsActivity::class.java)

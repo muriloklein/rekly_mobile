@@ -1,5 +1,7 @@
 package com.example.rekly.util
 
+import android.content.res.ColorStateList
+import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.example.rekly.R
@@ -27,4 +29,11 @@ fun categoryVisual(categoryId: Long): CategoryVisual = when (categoryId) {
         CategoryVisual(R.drawable.ic_category_insurance, R.color.category_insurance, R.color.category_insurance_on)
     else ->
         CategoryVisual(R.drawable.ic_category_other, R.color.category_other, R.color.category_other_on)
+}
+
+fun ImageView.showCategoryAvatar(categoryId: Long) {
+    val visual = categoryVisual(categoryId)
+    setImageResource(visual.icon)
+    backgroundTintList = ColorStateList.valueOf(context.getColor(visual.container))
+    imageTintList = ColorStateList.valueOf(context.getColor(visual.onContainer))
 }

@@ -23,6 +23,71 @@
             android:padding="@dimen/spacing_large">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/headerCard"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_medium">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/categoryIcon"
+                            android:layout_width="@dimen/category_avatar_size"
+                            android:layout_height="@dimen/category_avatar_size"
+                            android:background="@drawable/bg_category_circle"
+                            android:importantForAccessibility="no"
+                            android:padding="@dimen/category_avatar_padding"
+                            tools:src="@drawable/ic_category_streaming" />
+
+                        <TextView
+                            android:id="@+id/categoryText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_medium"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleMedium"
+                            tools:text="Streaming" />
+
+                        <TextView
+                            android:id="@+id/statusChip"
+                            style="@style/Widget.Rekly.StatusChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_small"
+                            tools:text="Ativa" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/monthlyLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:text="@string/label_monthly"
+                        android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    <TextView
+                        android:id="@+id/monthlyAmountText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceHeadlineLarge"
+                        android:textStyle="bold"
+                        tools:text="R$ 55,90/mês" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/incompleteCard"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
@@ -63,10 +128,6 @@
                     layout="@layout/layout_detail_row" />
 
                 <include
-                    android:id="@+id/monthlyRow"
-                    layout="@layout/layout_detail_row" />
-
-                <include
                     android:id="@+id/realCostRow"
                     layout="@layout/layout_detail_row" />
 
@@ -82,14 +143,6 @@
                     android:id="@+id/billingDayRow"
                     layout="@layout/layout_detail_row" />
             </LinearLayout>
-
-            <include
-                android:id="@+id/categoryRow"
-                layout="@layout/layout_detail_row" />
-
-            <include
-                android:id="@+id/statusRow"
-                layout="@layout/layout_detail_row" />
 
             <TextView
                 android:layout_width="match_parent"

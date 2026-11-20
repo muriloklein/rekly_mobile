@@ -50,11 +50,11 @@
                 tools:text="R$ 55,90" />
 
             <TextView
-                android:id="@+id/statusText"
+                android:id="@+id/statusChip"
+                style="@style/Widget.Rekly.StatusChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceLabelMedium"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginTop="4dp"
                 tools:text="Pago" />
         </LinearLayout>
     </LinearLayout>
