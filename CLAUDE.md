@@ -85,7 +85,8 @@ Arquivo novo vai para o pacote da sua camada. Se não couber em nenhum, pergunte
 - **Vencimentos** seguem o ciclo do período a partir do mês da data de início (anual vence uma vez por ano); vencimento anterior à data de início é ignorado; dia maior que o último do mês cai no último dia.
 - **Próximo vencimento**: primeiro vencimento do ciclo a partir de hoje, inclusive. Cancelada não tem.
 - **Pagamento presumido**: ao abrir a `MainActivity`, para cada assinatura ativa e completa (`isComplete()`) e cada competência do ciclo cujo vencimento já chegou (inclusive hoje) sem pagamento, gera um. Só a partir do mês de `activeSince`, sem retroativos; em teste não gera. Valor fixo → `PAID`; valor variável → `PENDING` com o último valor pago como estimativa. Deve ser **idempotente** (abrir o app duas vezes não duplica).
-- Pendente vira pago com confirmação do usuário, podendo ajustar o valor.
+- Pendente vira pago com confirmação do usuário, podendo ajustar o valor, ou só marcando como pago com o valor que já está. Um pagamento pago pode voltar a pendente (sem data de pagamento); só vale para meses que já têm pagamento (`PaymentStatusRules`).
+- Layouts só usam atributos da API 24 (`minSdk`): nada de `paddingHorizontal`, `paddingVertical` ou `layout_marginHorizontal` (API 26); use `Start`/`End` e `Top`/`Bottom`.
 - **Exclusão** de assinatura bloqueada se houver pagamentos; a alternativa é cancelar. Cancelada não gera novos pagamentos.
 - **Categoria**: nome único por usuário; padrão não editável nem excluível; exclusão bloqueada se tiver assinaturas.
 - **Sugestões** (calculadas na hora, sem tabela, em `SavingsSuggestions`): 2+ ativas na mesma categoria, só em Streaming e Música; em teste há mais de 30 dias (desde a data de início); pagamento pendente há mais de 7 dias após o vencimento.
