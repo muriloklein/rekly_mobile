@@ -12,6 +12,7 @@ import com.example.rekly.data.entity.SubscriptionDetails
 import com.example.rekly.data.repository.PaymentRepository
 import com.example.rekly.data.repository.SubscriptionRepository
 import com.example.rekly.domain.model.OperationResult
+import com.example.rekly.domain.model.PaymentStatus
 import com.example.rekly.domain.model.RuleError
 import kotlinx.coroutines.launch
 
@@ -40,6 +41,18 @@ class SubscriptionDetailsViewModel(
         viewModelScope.launch {
             val result = paymentRepository.confirm(payment, amountCents)
             if (result is OperationResult.Failure) _error.value = result.error
+        }
+    }
+
+    /** Flips a payment between paid and pending; only a payment of the subscription on screen. */
+    fun togglePaid(paymentId: Long) {
+        val payment = details.value?.payments?.firstOrNull { it.id == paymentId } ?: return
+        viewModelScope.launch {
+            if (payment.status == PaymentStatus.PAID) {
+                paymentRepository.markUnpaid(payment)
+            } else {
+                paymentRepository.markPaid(payment)
+            }
         }
     }
 

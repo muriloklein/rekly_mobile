@@ -17,7 +17,8 @@ import com.example.rekly.util.labelRes
 import com.example.rekly.util.showChip
 
 class PaymentAdapter(
-    private val onConfirmClick: (Payment) -> Unit
+    private val onAdjustClick: (Payment) -> Unit,
+    private val onTogglePaidClick: (Payment) -> Unit
 ) : ListAdapter<Payment, PaymentAdapter.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -42,8 +43,10 @@ class PaymentAdapter(
             } else {
                 context.getString(R.string.payment_due_on, DateFormatter.format(payment.dueDate))
             }
-            binding.confirmButton.isVisible = !isPaid
-            binding.confirmButton.setOnClickListener { onConfirmClick(payment) }
+            binding.adjustButton.isVisible = !isPaid
+            binding.adjustButton.setOnClickListener { onAdjustClick(payment) }
+            binding.togglePaidButton.setText(if (isPaid) R.string.action_mark_unpaid else R.string.action_mark_paid)
+            binding.togglePaidButton.setOnClickListener { onTogglePaidClick(payment) }
         }
     }
 

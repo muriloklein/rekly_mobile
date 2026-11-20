@@ -9,6 +9,7 @@ import com.example.rekly.domain.model.PaymentStatus
 import com.example.rekly.domain.model.RuleError
 import com.example.rekly.domain.model.SubscriptionStatus
 import com.example.rekly.domain.rules.PaymentGenerator
+import com.example.rekly.domain.rules.PaymentStatusRules
 import java.time.LocalDate
 
 class PaymentRepository(
@@ -44,13 +45,12 @@ class PaymentRepository(
         today: LocalDate = LocalDate.now()
     ): OperationResult<Unit> {
         if (amountCents <= 0) return OperationResult.Failure(RuleError.INVALID_AMOUNT)
-        paymentDao.update(
-            payment.copy(
-                amountCents = amountCents,
-                paidDate = today,
-                status = PaymentStatus.PAID
-            )
-        )
+        paymentDao.update(PaymentStatusRules.markPaid(payment.copy(amountCents = amountCents), today))
         return OperationResult.Success(Unit)
     }
+
+    suspend fun markPaid(payment: Payment, today: LocalDate = LocalDate.now()) =
+        paymentDao.update(PaymentStatusRules.markPaid(payment, today))
+
+    suspend fun markUnpaid(payment: Payment) = paymentDao.update(PaymentStatusRules.markUnpaid(payment))
 }

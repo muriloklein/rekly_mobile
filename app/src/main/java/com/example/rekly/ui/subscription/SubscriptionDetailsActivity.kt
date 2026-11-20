@@ -44,7 +44,10 @@ class SubscriptionDetailsActivity : AppCompatActivity() {
     private val subscriptionId: Long
         get() = intent.getLongExtra(EXTRA_SUBSCRIPTION_ID, NO_ID)
 
-    private val paymentAdapter = PaymentAdapter { payment -> openConfirmPayment(payment) }
+    private val paymentAdapter = PaymentAdapter(
+        onAdjustClick = { payment -> openConfirmPayment(payment) },
+        onTogglePaidClick = { payment -> viewModel.togglePaid(payment.id) }
+    )
 
     private val viewModel: SubscriptionDetailsViewModel by viewModels {
         val database = AppDatabase.getInstance(this)
