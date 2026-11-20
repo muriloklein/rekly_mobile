@@ -11,6 +11,8 @@ import com.example.rekly.databinding.FragmentProfileBinding
 import com.example.rekly.ui.auth.LoginActivity
 import com.example.rekly.ui.category.CategoriesActivity
 import com.example.rekly.util.SessionManager
+import com.example.rekly.util.ThemeMode
+import com.example.rekly.util.ThemeSettings
 
 /** User data, access to categories and the Log out button. */
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
@@ -33,12 +35,31 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             startActivity(CategoriesActivity.newIntent(requireContext()))
         }
         binding.logoutButton.setOnClickListener { logout() }
+        setUpThemeToggle()
 
         userId = SessionManager(requireContext()).loggedUserId() ?: return
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user ?: return@observe
             binding.nameText.text = user.name
             binding.emailText.text = user.email
+        }
+    }
+
+    private fun setUpThemeToggle() {
+        val settings = ThemeSettings(requireContext())
+        val buttons = mapOf(
+            ThemeMode.SYSTEM to R.id.themeSystem,
+            ThemeMode.LIGHT to R.id.themeLight,
+            ThemeMode.DARK to R.id.themeDark
+        )
+        // Checks the saved one before listening, so showing the screen does not re-apply the theme
+        binding.themeToggle.check(buttons.getValue(settings.mode()))
+        binding.themeToggle.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            val mode = buttons.entries.firstOrNull { it.value == checkedId }?.key
+            if (isChecked && mode != null) {
+                settings.save(mode)
+                settings.apply()
+            }
         }
     }
 

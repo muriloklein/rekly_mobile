@@ -158,6 +158,10 @@
 
     <!-- Profile -->
     <string name="action_manage_categories">Categorias</string>
+    <string name="appearance_title">Aparência</string>
+    <string name="theme_system">Sistema</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
 
     <!-- Categories -->
     <string name="title_categories">Categorias</string>
