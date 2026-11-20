@@ -122,8 +122,8 @@
     <string name="filter_active">Ativas</string>
     <string name="filter_trial">Em teste</string>
     <string name="filter_canceled">Canceladas</string>
-    <string name="subscription_item_detail">%1$s · %2$s</string>
-    <string name="subscription_monthly_amount">%1$s/mês</string>
+    <string name="subscription_per_month">/mês</string>
+    <string name="subscription_due">Vence %1$s</string>
     <string name="subscription_missing_amount">Falta valor</string>
 
     <!-- Profile -->

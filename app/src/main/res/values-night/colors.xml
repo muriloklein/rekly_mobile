@@ -40,4 +40,20 @@
     <color name="md_theme_surfaceContainer">#1E2025</color>
     <color name="md_theme_surfaceContainerHigh">#282A2F</color>
     <color name="md_theme_surfaceContainerHighest">#33353A</color>
+
+    <!-- Category avatar: container and icon color -->
+    <color name="category_streaming">#523C6B</color>
+    <color name="category_streaming_on">#F0DBFF</color>
+    <color name="category_music">#6E2B4A</color>
+    <color name="category_music_on">#FFD9E3</color>
+    <color name="category_housing">#31476A</color>
+    <color name="category_housing_on">#D6E3FF</color>
+    <color name="category_telecom">#214F4B</color>
+    <color name="category_telecom_on">#C6F0EA</color>
+    <color name="category_health">#365027</color>
+    <color name="category_health_on">#D4F2C7</color>
+    <color name="category_insurance">#5C4012</color>
+    <color name="category_insurance_on">#FFE0B3</color>
+    <color name="category_other">#44474E</color>
+    <color name="category_other_on">#E0E2EC</color>
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Small label with a rounded background; the color comes from a ChipTone at runtime -->
+    <style name="Widget.Rekly.StatusChip" parent="">
+        <item name="android:background">@drawable/bg_status_chip</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceLabelMedium</item>
+    </style>
+</resources>

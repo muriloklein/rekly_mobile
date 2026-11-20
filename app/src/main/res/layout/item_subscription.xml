@@ -1,55 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:minHeight="?attr/listPreferredItemHeight"
-    android:orientation="horizontal"
-    android:paddingStart="@dimen/spacing_medium"
-    android:paddingEnd="@dimen/spacing_medium"
-    android:paddingTop="@dimen/spacing_small"
-    android:paddingBottom="@dimen/spacing_small">
+    android:layout_marginStart="@dimen/spacing_medium"
+    android:layout_marginTop="@dimen/spacing_small"
+    android:layout_marginEnd="@dimen/spacing_medium"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_medium">
 
-        <TextView
-            android:id="@+id/nameText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceBodyLarge"
-            tools:text="Netflix" />
+        <ImageView
+            android:id="@+id/categoryIcon"
+            android:layout_width="@dimen/category_avatar_size"
+            android:layout_height="@dimen/category_avatar_size"
+            android:background="@drawable/bg_category_circle"
+            android:importantForAccessibility="no"
+            android:padding="@dimen/category_avatar_padding"
+            tools:src="@drawable/ic_category_streaming" />
 
-        <TextView
-            android:id="@+id/detailText"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceBodySmall"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            tools:text="Streaming · Ativa" />
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                tools:text="Netflix" />
+
+            <TextView
+                android:id="@+id/categoryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="Streaming" />
+
+            <TextView
+                android:id="@+id/statusChip"
+                style="@style/Widget.Rekly.StatusChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:visibility="gone"
+                tools:text="Em teste"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/amountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textStyle="bold"
+                tools:text="R$ 55,90/mês" />
+
+            <TextView
+                android:id="@+id/dueText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="Vence 05/12" />
+
+            <TextView
+                android:id="@+id/missingAmountChip"
+                style="@style/Widget.Rekly.StatusChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/amountText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_medium"
-        android:textAppearance="?attr/textAppearanceTitleSmall"
-        tools:text="R$ 55,90/mês" />
-
-    <TextView
-        android:id="@+id/missingAmountText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_medium"
-        android:text="@string/subscription_missing_amount"
-        android:textAppearance="?attr/textAppearanceLabelMedium"
-        android:textColor="?attr/colorError"
-        android:visibility="gone" />
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

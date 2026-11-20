@@ -4,4 +4,6 @@
     <dimen name="spacing_medium">16dp</dimen>
     <dimen name="spacing_large">24dp</dimen>
     <dimen name="list_bottom_clearance">88dp</dimen>
+    <dimen name="category_avatar_size">44dp</dimen>
+    <dimen name="category_avatar_padding">10dp</dimen>
 </resources>
