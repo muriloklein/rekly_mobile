@@ -21,7 +21,7 @@ O repositório `rekly_mobile` hoje tem só o projeto vazio do Android Studio (AG
 - **Onboarding em checklist:** no primeiro acesso o usuário marca o que paga e as assinaturas são criadas em lote; só falta informar valor e dia.
 - **Pagamento presumido:** quando passa o dia de cobrança, o app gera o pagamento do mês sozinho. Valor fixo (Netflix) entra como pago; valor variável (água, luz) entra como pendente para confirmar o valor real com um toque.
 
-**O que fica de fora:** recuperação de senha por e-mail, logs e triggers de auditoria, preferências detalhadas de notificação, múltiplas moedas (fica só BRL), filtro histórico por mês no dashboard, logout por inatividade e importação/exportação de CSV. Open Finance fica citado como evolução futura: exige instituição autorizada ou agregador pago com backend próprio.
+**O que fica de fora:** recuperação de senha por e-mail, logs e triggers de auditoria, notificações e lembretes de vencimento (o lembrete com WorkManager era opcional e foi retirado), múltiplas moedas (fica só BRL), filtro histórico por mês no dashboard, logout por inatividade e importação/exportação de CSV. Open Finance fica citado como evolução futura: exige instituição autorizada ou agregador pago com backend próprio.
 
 **Por que Room:** funciona offline, não depende do deploy da versão web estar no ar no dia da apresentação, e é o conteúdo mais cobrado na disciplina (entidades, DAOs, relacionamentos). Retrofit ou Firebase podem entrar como extra no fim, se sobrar tempo.
 
@@ -157,9 +157,8 @@ Antes de começar o dia, cada um faz `git pull` na `develop` para pegar o que o 
 | 7 | CRUD de categorias | Murilo | 2 | Tela de categorias com CRUD completo (o `CategoryRepository` já existe) | ✅ Concluída (Perfil também mostra nome e e-mail) |
 | 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote | ✅ Concluída |
 | 9 | Pagamentos | Guilherme | 6 | Chamar a geração presumida ao abrir a Main, confirmar pendentes e mostrar o histórico no detalhe | ✅ Concluída (a lógica já vinha da tarefa 2; a geração ao abrir a Main, o histórico no detalhe e a confirmação com erro no campo vieram agora). Também é possível marcar cada mês do histórico como pago ou não pago |
-| 10 | Dashboard | Murilo | 9 | Fragment Resumo com totais, vencimentos, pendentes e sugestões (os cálculos já estão no `ExpenseCalculator`) | ⬜ |
-| 11 | Notificações | Murilo | 9 | Lembrete diário com WorkManager (extra) | ⬜ |
-| 12 | README e prints | Os dois | todas | README completo e pasta `prints/` | ⬜ |
+| 10 | Dashboard | Murilo | 9 | Fragment Resumo com totais, vencimentos, pendentes e sugestões (os cálculos já estão no `ExpenseCalculator`) | ✅ Concluída (pendentes confirmados direto do Resumo) |
+| 11 | README e prints | Os dois | todas | README completo e pasta `prints/` | 🟡 README pronto; faltam os prints das telas |
 
 Depois do setup, as tarefas 2, 3 e 4 andam em paralelo; depois 5 e 7; depois 6 e 8. O `User` fica no setup para a autenticação não esperar pelo banco das outras entidades; cada nova entidade só é acrescentada na lista do `AppDatabase`.
 
@@ -189,7 +188,7 @@ O trabalho cabe em 4 etapas; o app precisa estar completo no fim da etapa 3, dei
 1. **Base** — tarefas 1, 2 e 4. Ao fim: app abre, banco criado, navegação vazia funcionando. ✅ Concluída e mesclada na `main`.
 2. **Núcleo** — tarefas 3, 5, 6 e 7. Ao fim: login real, catálogo e os dois CRUDs completos. ✅ Concluída.
 3. **Menos trabalho manual** — tarefas 8, 9 e 10. Ao fim: onboarding, pagamentos automáticos e dashboard. ✅ Concluída.
-4. **Entrega** — tarefas 11 (se der tempo) e 12, testes no aparelho, ensaio da apresentação. Polimento da interface já feito: lista de assinaturas em cards com ícone de categoria e chips de situação, detalhe com a mensalidade em destaque, estado vazio com ação e botão estendido de nova assinatura. Os layouts usam só atributos da API 24 (o `minSdk`); `paddingHorizontal`, `paddingVertical` e `layout_marginHorizontal` só existem a partir da API 26.
+4. **Entrega** — tarefa 11 (README e prints), testes no aparelho, merge final na `main` e ensaio da apresentação. Polimento da interface já feito: lista de assinaturas em cards com ícone de categoria e chips de situação, detalhe com a mensalidade em destaque, estado vazio com ação e botão estendido de nova assinatura. Os layouts usam só atributos da API 24 (o `minSdk`); `paddingHorizontal`, `paddingVertical` e `layout_marginHorizontal` só existem a partir da API 26.
 
 O fim de cada etapa é um bom momento para fazer o merge da `develop` na `main`.
 
@@ -206,6 +205,6 @@ O fim de cada etapa é um bom momento para fazer o merge da `develop` na `main`.
 - [ ] Rotação de tela não perde dados do formulário
 - [ ] Todos os commits em Conventional Commits, dos dois autores
 - [ ] Versão final da `develop` mesclada na `main`
-- [ ] README com nome, integrantes, descrição, tecnologias e instruções de execução
+- [x] README com nome, integrantes, descrição, tecnologias e instruções de execução
 - [ ] Pasta `prints/` com uma imagem por tela, referenciada no README
 - [ ] Roteiro da apresentação: cadastro → onboarding → completar valores → dashboard → confirmar conta de luz → editar → excluir bloqueado → rotação → Database Inspector → histórico do Git
