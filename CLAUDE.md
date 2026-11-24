@@ -28,10 +28,9 @@ O app é avaliado por **boas práticas, organização e documentação**, não s
 - Material Components 3, ConstraintLayout, RecyclerView
 - Room (runtime + ktx + compiler via **KSP**, nunca kapt)
 - Lifecycle: ViewModel + LiveData, Coroutines
-- WorkManager (apenas para o lembrete de vencimento, se implementado)
 - Versões de dependências **somente** em `gradle/libs.versions.toml`
 
-**Fora do escopo — não adicionar:** Retrofit, Firebase, Hilt/Dagger, Navigation Component, Compose, import/export de CSV, Open Finance, recuperação de senha por e-mail. Não adicione nenhuma dependência nova sem a dupla pedir.
+**Fora do escopo — não adicionar:** Retrofit, Firebase, Hilt/Dagger, Navigation Component, Compose, import/export de CSV, Open Finance, recuperação de senha por e-mail, notificações e WorkManager (o lembrete de vencimento foi retirado do escopo). Não adicione nenhuma dependência nova sem a dupla pedir.
 
 ## Arquitetura (MVVM)
 
@@ -86,7 +85,6 @@ Arquivo novo vai para o pacote da sua camada. Se não couber em nenhum, pergunte
 - **Próximo vencimento**: primeiro vencimento do ciclo a partir de hoje, inclusive. Cancelada não tem.
 - **Pagamento presumido**: ao abrir a `MainActivity`, para cada assinatura ativa e completa (`isComplete()`) e cada competência do ciclo cujo vencimento já chegou (inclusive hoje) sem pagamento, gera um. Só a partir do mês de `activeSince`, sem retroativos; em teste não gera. Valor fixo → `PAID`; valor variável → `PENDING` com o último valor pago como estimativa. Deve ser **idempotente** (abrir o app duas vezes não duplica).
 - Pendente vira pago com confirmação do usuário, podendo ajustar o valor, ou só marcando como pago com o valor que já está. Um pagamento pago pode voltar a pendente (sem data de pagamento); só vale para meses que já têm pagamento (`PaymentStatusRules`).
-- Layouts só usam atributos da API 24 (`minSdk`): nada de `paddingHorizontal`, `paddingVertical` ou `layout_marginHorizontal` (API 26); use `Start`/`End` e `Top`/`Bottom`.
 - **Exclusão** de assinatura bloqueada se houver pagamentos; a alternativa é cancelar. Cancelada não gera novos pagamentos.
 - **Categoria**: nome único por usuário; padrão não editável nem excluível; exclusão bloqueada se tiver assinaturas.
 - **Sugestões** (calculadas na hora, sem tabela, em `SavingsSuggestions`): 2+ ativas na mesma categoria, só em Streaming e Música; em teste há mais de 30 dias (desde a data de início); pagamento pendente há mais de 7 dias após o vencimento.
@@ -106,6 +104,7 @@ Arquivo novo vai para o pacote da sua camada. Se não couber em nenhum, pergunte
 ## UI e ciclo de vida
 
 - Um layout XML por tela; itens de lista em `item_*.xml`.
+- Layouts só usam atributos da API 24 (`minSdk`): nada de `paddingHorizontal`, `paddingVertical` ou `layout_marginHorizontal` (API 26); use `Start`/`End` e `Top`/`Bottom`.
 - Textos em `strings.xml`, cores em `colors.xml`, dimensões em `dimens.xml`. Nada de string ou cor fixa no layout ou no Kotlin.
 - Tema único `Theme.Rekly` (Material 3) e mesma toolbar em todas as telas.
 - Estado de formulário no ViewModel para sobreviver à rotação.
@@ -135,7 +134,7 @@ Arquivo novo vai para o pacote da sua camada. Se não couber em nenhum, pergunte
 
 - `main`: só versões estáveis, recebe merge da `develop` (ex.: ao fim de cada etapa).
 - `develop`: onde o trabalho acontece. Os dois integrantes fazem commits diários nela.
-- Antes de começar, `git pull` na `develop` para evitar conflitos.
+- Antes de começar, `git pull --rebase` na `develop` para evitar conflitos. O `--rebase` evita os commits automáticos "Merge branch 'develop'...", que fogem do Conventional Commits.
 - Cada integrante commita da própria conta do GitHub.
 - **Conventional Commits**, em português, minúsculas, imperativo, um assunto por commit:
 
