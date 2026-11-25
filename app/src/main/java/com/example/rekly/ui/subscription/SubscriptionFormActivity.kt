@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import com.example.rekly.R
 import com.example.rekly.data.entity.Category
 import com.example.rekly.data.local.AppDatabase
@@ -25,6 +26,7 @@ import com.example.rekly.util.messageRes
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputLayout
 import java.time.LocalDate
 
 class SubscriptionFormActivity : AppCompatActivity() {
@@ -82,6 +84,15 @@ class SubscriptionFormActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Registered after the text of a rotation is restored (which also fires the watchers),
+     * so a restored field does not wipe the error it is showing.
+     */
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        if (::binding.isInitialized) clearErrorsOnEdit()
+    }
+
     override fun onStart() {
         super.onStart()
         if (SessionManager(this).loggedUserId() == null) openLogin()
@@ -110,6 +121,24 @@ class SubscriptionFormActivity : AppCompatActivity() {
         binding.startDateInput.setOnClickListener { openDatePicker() }
         // After a rotation the picker is restored by the FragmentManager, but without its listener
         findDatePicker()?.let { listenToDatePicker(it) }
+    }
+
+    private fun clearErrorsOnEdit() {
+        binding.serviceNameInput.doAfterTextChanged {
+            clearError(binding.serviceNameLayout) { it.copy(serviceName = null) }
+        }
+        binding.amountInput.doAfterTextChanged { clearError(binding.amountLayout) { it.copy(amount = null) } }
+        binding.billingDayInput.doAfterTextChanged {
+            clearError(binding.billingDayLayout) { it.copy(billingDay = null) }
+        }
+        binding.participantsInput.doAfterTextChanged {
+            clearError(binding.participantsLayout) { it.copy(participants = null) }
+        }
+    }
+
+    // Only asks the ViewModel when an error is on screen, so ordinary typing causes no state change
+    private fun clearError(layout: TextInputLayout, change: (SubscriptionFormErrors) -> SubscriptionFormErrors) {
+        if (layout.error != null) viewModel.clearError(change)
     }
 
     private fun save() {

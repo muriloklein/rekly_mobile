@@ -96,13 +96,19 @@ class SubscriptionFormViewModel(
         _prefill.value = SubscriptionPrefill(serviceName = service.name, variableAmount = service.variableAmount)
     }
 
-    fun selectCategory(categoryId: Long) = update { it.copy(categoryId = categoryId) }
+    fun selectCategory(categoryId: Long) =
+        update { it.copy(categoryId = categoryId, errors = it.errors.copy(category = null)) }
 
     fun selectPeriod(period: BillingPeriod) = update { it.copy(period = period) }
 
     fun selectStatus(status: SubscriptionStatus) = update { it.copy(status = status) }
 
-    fun selectStartDate(startDate: LocalDate) = update { it.copy(startDate = startDate) }
+    fun selectStartDate(startDate: LocalDate) =
+        update { it.copy(startDate = startDate, errors = it.errors.copy(startDate = null)) }
+
+    /** Hides a field's error as soon as the user edits it, instead of waiting for the next save. */
+    fun clearError(change: (SubscriptionFormErrors) -> SubscriptionFormErrors) =
+        update { it.copy(errors = change(it.errors)) }
 
     fun save(
         serviceName: String,
