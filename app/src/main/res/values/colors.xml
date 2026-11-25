@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Same in light and dark: the status bar icons are white, so the toolbar must stay dark -->
+    <color name="toolbar_background">#23395B</color>
+    <color name="toolbar_content">#FFFFFF</color>
+
     <color name="md_theme_primary">#23395B</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
     <color name="md_theme_primaryContainer">#D6E3FF</color>

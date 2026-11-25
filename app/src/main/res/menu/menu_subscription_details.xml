@@ -5,6 +5,6 @@
         android:id="@+id/action_edit"
         android:icon="@drawable/ic_edit"
         android:title="@string/action_edit"
-        app:iconTint="?attr/colorOnPrimary"
+        app:iconTint="@color/toolbar_content"
         app:showAsAction="ifRoom" />
 </menu>
