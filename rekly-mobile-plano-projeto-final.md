@@ -158,7 +158,7 @@ Antes de começar o dia, cada um faz `git pull` na `develop` para pegar o que o 
 | 8 | Onboarding | Guilherme | 3, 5 | Checklist do primeiro acesso, criação em lote | ✅ Concluída |
 | 9 | Pagamentos | Guilherme | 6 | Chamar a geração presumida ao abrir a Main, confirmar pendentes e mostrar o histórico no detalhe | ✅ Concluída (a lógica já vinha da tarefa 2; a geração ao abrir a Main, o histórico no detalhe e a confirmação com erro no campo vieram agora). Também é possível marcar cada mês do histórico como pago ou não pago |
 | 10 | Dashboard | Murilo | 9 | Fragment Resumo com totais, vencimentos, pendentes e sugestões (os cálculos já estão no `ExpenseCalculator`) | ✅ Concluída (pendentes confirmados direto do Resumo) |
-| 11 | README e prints | Os dois | todas | README completo e pasta `prints/` | 🟡 README pronto; faltam os prints das telas |
+| 11 | README e prints | Os dois | todas | README completo e pasta `prints/` | ✅ Concluída (README e 12 prints das telas) |
 
 Depois do setup, as tarefas 2, 3 e 4 andam em paralelo; depois 5 e 7; depois 6 e 8. O `User` fica no setup para a autenticação não esperar pelo banco das outras entidades; cada nova entidade só é acrescentada na lista do `AppDatabase`.
 
@@ -206,5 +206,5 @@ O fim de cada etapa é um bom momento para fazer o merge da `develop` na `main`.
 - [ ] Todos os commits em Conventional Commits, dos dois autores
 - [ ] Versão final da `develop` mesclada na `main`
 - [x] README com nome, integrantes, descrição, tecnologias e instruções de execução
-- [ ] Pasta `prints/` com uma imagem por tela, referenciada no README
+- [x] Pasta `prints/` com uma imagem por tela, referenciada no README
 - [ ] Roteiro da apresentação: cadastro → onboarding → completar valores → dashboard → confirmar conta de luz → editar → excluir bloqueado → rotação → Database Inspector → histórico do Git
